@@ -1,6 +1,7 @@
 import React from 'react';
 import Constants from 'expo-constants';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
 
 const Screen = (props) => {
     return (
@@ -12,7 +13,8 @@ const Screen = (props) => {
 
 const styles = StyleSheet.create({
     screen: {
-        paddingTop: Constants.statusBarHeight
+        paddingTop: Constants.statusBarHeight,
+        flex: 1
     }
 })
 
