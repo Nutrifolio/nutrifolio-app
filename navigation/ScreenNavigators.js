@@ -35,3 +35,9 @@ export const HomeNavigator = () => {
         <ScreenNavigator firstScreenName='HomeScreen' />
     );
 };
+
+export const SearchNavigator = () => {
+    return (
+        <ScreenNavigator firstScreenName='SearchScreen' />
+    );
+};
