@@ -1,15 +1,26 @@
 import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import propTypes from 'prop-types';
+import HomeScreen from '../screens/HomeScreen';
+import SearchScreen from '../screens/SearchScreen';
+import ProductScreen from '../screens/ProductScreen';
+import StoreScreen from '../screens/StoreScreen';
 
 const Stack = createStackNavigator();
 
 const ScreenNavigator = (props) => {
     return (
         <Stack.Navigator
-            initialRouteName={props.startPageName}
+            initialRouteName={props.firstScreenName}
+            screenOptions={{
+                headerTitle: props.firstScreenName,
+                headerTransparent: true
+            }}
         >
-            <Stack.Screen name="Home"/>
+            <Stack.Screen name="HomeScreen" component={HomeScreen}/>
+            <Stack.Screen name="SearchScreen" component={SearchScreen}/>
+            <Stack.Screen name="ProductScreen" component={ProductScreen}/>
+            <Stack.Screen name="StoreScreen" component={StoreScreen}/>
         </Stack.Navigator>
     );
 };
