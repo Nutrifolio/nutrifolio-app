@@ -1,5 +1,6 @@
 import React from 'react'
-import { Text, ViewPropTypes } from "react-native"
+import { Text } from "react-native"
+import propTypes from 'prop-types';
 import {
     useFonts,
     Rubik_400Regular,
@@ -47,8 +48,8 @@ const NutriText = (props) => {
 };
 
 NutriText.propTypes = {
-    style: ViewPropTypes.style,
-    children: ViewPropTypes.children
+    style: propTypes.object,
+    children: propTypes.node
 }
 
 export default NutriText;
