@@ -3,19 +3,24 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
 import ProfileScreen from '../screens/ProfileScreen'
+import { HomeNavigator, SearchNavigator } from './ScreenNavigators';
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
     return (
-        <Tab.Navigator>
+        <Tab.Navigator
+            screenOptions={{
+                headerShown: false
+            }}
+        >
             <Tab.Screen
                 name="Home"
-                component={HomeScreen}
+                component={HomeNavigator}
             />
             <Tab.Screen
                 name="Search"
-                component={SearchScreen}
+                component={SearchNavigator}
             />
             <Tab.Screen
                 name="Profile"
