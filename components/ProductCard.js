@@ -8,15 +8,42 @@ const ProductCard = (props) => {
       <View style={styles.detailsContainer}>
           
       </View>
-      <Image source={props.image} style={styles.image} />
+      <View style={styles.imageContainer}>
+        <Image source={{uri: props.image}} style={styles.image} />
+      </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-    container: {},
-    detailsContainer: {},
-    image: {}
+    container: {
+      height: 180,
+      width: '100%',
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      padding: 20,
+      backgroundColor: 'yellow'
+    },
+    detailsContainer: {
+      height: '100%',
+      width: '65%',
+      backgroundColor: 'blue',
+      flexDirection: 'column',
+      
+    },
+    imageContainer: {
+      height: '100%',
+      width: '35%',
+      backgroundColor: 'red',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    image: {
+      height: '60%',
+      width: '85%',
+      resizeMode: 'cover',
+      borderRadius: 10
+    }
 })
 
 ProductCard.propTypes = {
