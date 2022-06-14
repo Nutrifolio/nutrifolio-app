@@ -44,7 +44,12 @@ const NutriText = (props) => {
         return <Text style={props.style}>{props.children}</Text>;
     }
 
-    return <Text style={determineFont(props.style)}>{props.children}</Text>;
+    return (
+        <Text 
+            numberOfLines={props.numberOfLines ? props.numberOfLines : 0} 
+            style={determineFont(props.style)}>{props.children}
+        </Text>
+    );
 };
 
 NutriText.propTypes = {

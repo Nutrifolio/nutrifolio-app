@@ -9,7 +9,7 @@ const ProductCard = (props) => {
     <View style={styles.container}>
       <View style={styles.detailsContainer}>
           <NutriText style={styles.title}>{props.title}</NutriText>
-          <NutriText style={styles.description}>{props.description}</NutriText>
+          <NutriText numberOfLines={2} style={styles.description}>{props.description}</NutriText>
       </View>
       <View style={styles.imageContainer}>
         <Image source={{uri: props.image}} style={styles.image} />
