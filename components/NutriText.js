@@ -1,6 +1,5 @@
 import React from 'react'
 import { Text, ViewPropTypes } from "react-native"
-import propTypes from 'prop-types';
 import {
     useFonts,
     Rubik_400Regular,
@@ -10,13 +9,13 @@ import {
 
 const determineFont = (style) => {
     if (style) {
-        if (style.hasOwnProperty("fontWeight") && style.fontWeight === "600") {
+        if ("fontWeight" in style && style.fontWeight === "600") {
             return {
                 ...style,
                 fontFamily: "Rubik_600SemiBold",
             };
         } else if (
-            style.hasOwnProperty("fontWeight") &&
+            "fontWeight" in style &&
             (style.fontWeight === "bold" || style.fontWeight === "700")
         ) {
             return {
