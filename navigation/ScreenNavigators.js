@@ -26,8 +26,12 @@ const ScreenNavigator = (props) => {
 };
 
 ScreenNavigator.propTypes = {
-    startPageName: propTypes.string
+    firstScreenName: propTypes.string
 }
 
 
-export default ScreenNavigator;
+export const HomeNavigator = () => {
+    return (
+        <ScreenNavigator firstScreenName='HomeScreen' />
+    );
+};
