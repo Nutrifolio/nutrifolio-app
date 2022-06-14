@@ -29,6 +29,9 @@ const determineFont = (style) => {
     }
 };
 
+/**
+ * Use fontWeight style property to specify bold or semi-bold text
+ */
 const NutriText = (props) => {
     let [fontsLoaded] = useFonts({
         Rubik_400Regular,
