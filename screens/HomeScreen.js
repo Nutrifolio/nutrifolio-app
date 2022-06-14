@@ -10,11 +10,11 @@ const HomeScreen = (props) => {
                 <Text>HomeScreen</Text>
                 <Button
                     title="Go to product"
-                    onPress={() => props.navigation.navigate('Product')}
+                    onPress={() => props.navigation.navigate('ProductScreen')}
                 />
                 <Button
                     title="Go to store"
-                    onPress={() => props.navigation.navigate('Store')}
+                    onPress={() => props.navigation.navigate('StoreScreen')}
                 />
             </View>
         </Screen>
