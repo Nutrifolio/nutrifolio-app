@@ -1,6 +1,7 @@
 import React from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
+import propTypes from 'prop-types';
 
 const Screen = (props) => {
     return (
@@ -8,6 +9,10 @@ const Screen = (props) => {
             {props.children}
         </SafeAreaView>
     );
+}
+
+Screen.propTypes = {
+    children: propTypes.node
 }
 
 const styles = StyleSheet.create({
