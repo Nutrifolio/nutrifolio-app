@@ -13,7 +13,7 @@ const ScreenNavigator = (props) => {
         <Stack.Navigator
             initialRouteName={props.firstScreenName}
             screenOptions={{
-                headerTitle: props.firstScreenName,
+                headerShown: false,
                 headerTransparent: true
             }}
         >
