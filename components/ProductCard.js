@@ -105,7 +105,14 @@ const styles = StyleSheet.create({
 })
 
 ProductCard.propTypes = {
-    productImage: propTypes.string
+  title: propTypes.string,
+  description: propTypes.string,
+  calories: propTypes.string,
+  price: propTypes.string,
+  distance: propTypes.string,
+  storeImage: propTypes.string,
+  store: propTypes.string,
+  productImage: propTypes.string,
 }
 
 export default ProductCard;
