@@ -26,9 +26,16 @@ const ProductCard = (props) => {
               <FontAwesome name="map-marker" size={14} color="black" />
               <NutriText>{props.distance}</NutriText>
             </View>
+          </View>
+
+          <View style={styles.storeContainer}>
+            <Image source={{uri: props.storeImage}} style={styles.storeImage} />
+            <NutriText style={styles.storeName}>{props.store}</NutriText>
+          </View>
+
       </View>
-      <View style={styles.imageContainer}>
-        <Image source={{uri: props.image}} style={styles.image} />
+      <View style={styles.productImageContainer}>
+        <Image source={{uri: props.productImage}} style={styles.productImage} />
       </View>
     </View>
   )
@@ -41,7 +48,6 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       justifyContent: 'space-between',
       padding: 20,
-      backgroundColor: 'blue'
     },
     detailsContainer: {
       height: '100%',
@@ -69,13 +75,28 @@ const styles = StyleSheet.create({
       fontSize: 14,
       alignItems: 'center',
     },
+    storeContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    storeImage: {
+      borderRadius: 100,
+      resizeMode: 'center',
+      width: 25,
+      height: 25
+    },
+    storeName: {
+      fontSize: 12,
+      fontWeight: '600',
+      paddingLeft: 10
+    },
+    productImageContainer: {
       height: '100%',
       width: '35%',
-      backgroundColor: 'red',
       justifyContent: 'center',
       alignItems: 'center'
     },
-    image: {
+    productImage: {
       height: '70%',
       width: '85%',
       resizeMode: 'cover',
@@ -84,7 +105,7 @@ const styles = StyleSheet.create({
 })
 
 ProductCard.propTypes = {
-    image: propTypes.string
+    productImage: propTypes.string
 }
 
 export default ProductCard;
