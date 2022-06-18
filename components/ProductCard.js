@@ -3,7 +3,7 @@ import React from 'react'
 import propTypes from 'prop-types'
 import NutriText from './NutriText'
 import colors from '../styles/colors'
-import { FontAwesome } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 const ProductCard = (props) => {
   return (
@@ -20,10 +20,10 @@ const ProductCard = (props) => {
             </View>
             <View style={styles.values}>
               <NutriText>{props.price}</NutriText>
-              <FontAwesome name="euro" size={14} color="black" />
+              <MaterialCommunityIcons name="currency-eur" size={14} color="black" />
             </View>
             <View style={styles.values}>
-              <FontAwesome name="map-marker" size={14} color="black" />
+            <MaterialCommunityIcons name="map-marker" size={14} color="black" />
               <NutriText>{props.distance}</NutriText>
             </View>
           </View>
