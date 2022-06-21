@@ -2,11 +2,10 @@ import React from 'react'
 import { createStackNavigator } from '@react-navigation/stack'
 import LoginScreen from '../screens/LoginScreen'
 import RegisterScreen from '../screens/RegisterScreen'
-import AppNavigator from './AppNavigator'
 
 const Stack = createStackNavigator();
 
-const AuthNavigator = (props) => {
+const AuthNavigator = () => {
     return (
         <Stack.Navigator
             initialRouteName='LoginScreen'
