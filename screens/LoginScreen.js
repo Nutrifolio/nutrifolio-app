@@ -1,13 +1,17 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
+import PrimaryButton from '../components/buttons/PrimaryButton';
+import routes from '../navigation/routes'
 
 import Screen from '../components/Screen';
+import colors from '../styles/colors';
 
-const LoginScreen = () => {
+const LoginScreen = (props) => {
     return (
         <Screen>
             <View style={styles.container}>
                 <Text>LoginScreen</Text>
+                <PrimaryButton text='Log in' onPress={() => {}} />
             </View>
         </Screen>
     );
@@ -16,9 +20,15 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingHorizontal: 20,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    title: {
+        fontSize: 32,
+        color: colors.primary,
+        fontWeight: 'bold'
     }
 })
 
