@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import PrimaryButton from '../components/buttons/PrimaryButton';
+import NutriText from '../components/NutriText';
 import routes from '../navigation/routes'
 
 import Screen from '../components/Screen';
@@ -10,7 +11,7 @@ const LoginScreen = (props) => {
     return (
         <Screen>
             <View style={styles.container}>
-                <Text>LoginScreen</Text>
+                <NutriText style={styles.title}>Welcome Back</NutriText>
                 <PrimaryButton text='Log in' onPress={() => {}} />
             </View>
         </Screen>
