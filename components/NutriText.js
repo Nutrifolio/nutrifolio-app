@@ -54,7 +54,7 @@ const NutriText = (props) => {
 
 NutriText.propTypes = {
     style: propTypes.object,
-    children: propTypes.node
+    children: propTypes.string
 }
 
 export default NutriText;
