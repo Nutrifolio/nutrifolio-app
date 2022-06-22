@@ -21,7 +21,7 @@ const NutriTextInput = (props) => {
                 name={iconName}
                 style={styles.icon}
                 color={colors.black}
-                size={style.fontSize}
+                size={style.fontSize + 5}
             />
         );
     } else {
