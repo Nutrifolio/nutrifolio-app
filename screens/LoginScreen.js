@@ -1,18 +1,47 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import PrimaryButton from '../components/buttons/PrimaryButton';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 import NutriText from '../components/NutriText';
-import routes from '../navigation/routes'
-
 import Screen from '../components/Screen';
 import colors from '../styles/colors';
+import { NutriForm, NutriFormField, SubmitButton } from '../components/forms';
+import * as Yup from 'yup';
 
-const LoginScreen = (props) => {
+const validationSchema = Yup.object().shape({
+    email: Yup.string().required().email().label('Email'),
+    password: Yup.string().required().label('Password'),
+});
+
+const LoginScreen = () => {
+    const welcomeMessage = 'Welcome Back';
     return (
         <Screen>
             <View style={styles.container}>
-                <NutriText style={styles.title}>Welcome Back</NutriText>
-                <PrimaryButton text='Log in' onPress={() => {}} />
+                <NutriText style={styles.title}>{welcomeMessage}</NutriText>
+                <NutriForm
+                    initialValues={{ email: '', password: '' }}
+                    onSubmit={(values) => console.log(values)}
+                    validationSchema={validationSchema}
+                >
+                    <NutriFormField
+                        placeholder='Email'
+                        name='email'
+                        keyboardType='email-address'
+                        textContentType='emailAddress'
+                        iconName='email'
+                        autoCapitalize='none'
+                    />
+
+                    <NutriFormField
+                        placeholder='Password'
+                        name='password'
+                        autoCapitalize='none'
+                        iconName='lock'
+                        textContentType='password'
+                        secureTextEntry={true}
+                    />
+
+                    <SubmitButton text='Log in' />
+                </NutriForm>
             </View>
         </Screen>
     );
@@ -29,8 +58,9 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 32,
         color: colors.primary,
-        fontWeight: 'bold'
-    }
-})
+        fontWeight: 'bold',
+        marginBottom: 20,
+    },
+});
 
 export default LoginScreen;
