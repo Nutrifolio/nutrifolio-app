@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         fontSize: 32,
         color: colors.primary,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginBottom: 30,
     },
     link: {
         marginTop: 20,
