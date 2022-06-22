@@ -4,6 +4,7 @@ import NutriText from '../components/NutriText';
 import Screen from '../components/Screen';
 import colors from '../styles/colors';
 import { NutriForm, NutriFormField, SubmitButton } from '../components/forms';
+import NutriLink from '../components/NutriLink';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object().shape({
@@ -42,6 +43,7 @@ const LoginScreen = () => {
 
                     <SubmitButton text='Log in' />
                 </NutriForm>
+                <NutriLink text='Not a member yet?' style={styles.link} />
             </View>
         </Screen>
     );
@@ -60,6 +62,9 @@ const styles = StyleSheet.create({
         color: colors.primary,
         fontWeight: 'bold',
         marginBottom: 20,
+    },
+    link: {
+        marginTop: 20,
     },
 });
 
