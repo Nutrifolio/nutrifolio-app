@@ -5,13 +5,14 @@ import colors from '../styles/colors';
 import NutriText from './NutriText';
 
 const NutriLink = (props) => (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={{ ...styles.container, ...props.style }}>
         <NutriText style={styles.text}>{props.text}</NutriText>
     </TouchableOpacity>
 );
 
 NutriLink.propTypes = {
     text: propTypes.string,
+    style: propTypes.object,
 };
 
 const styles = StyleSheet.create({
