@@ -1,0 +1,28 @@
+name: Node.js CI
+
+on:
+    push:
+        branches: ['main']
+    pull_request:
+        branches: ['main']
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+
+        strategy:
+            matrix:
+                node-version: [12.x, 14.x, 16.x]
+                # See Node releases: https://nodejs.org/en/about/releases/
+                # setup-node action supported versions: https://github.com/actions/setup-node/#supported-version-syntax
+
+        steps:
+            - uses: actions/checkout@v3
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v3
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: 'yarn'
+            - run: yarn --frozen-lockfile
+            - name: Run ESLint
+              run: eslint . --ext .js,.jsx,.ts,.tsx
