@@ -12,7 +12,7 @@ jobs:
 
         strategy:
             matrix:
-                node-version: [12.x, 14.x, 16.x]
+                node-version: [14.x, 16.x]
                 # See Node releases: https://nodejs.org/en/about/releases/
                 # setup-node action supported versions: https://github.com/actions/setup-node/#supported-version-syntax
 
