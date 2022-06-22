@@ -33,12 +33,13 @@ AuthForm.propTypes = {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        marginBottom: 20,
+        paddingBottom: 20,
     },
     form: {
         borderBottomWidth: 1,
         width: '100%',
         flexDirection: 'row',
+        marginBottom: 10,
     },
 });
 
