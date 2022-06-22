@@ -1,5 +1,8 @@
 # Nutrifolio - User Facing App
 
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
+[![Node.js CI](https://github.com/Nutrifolio/nutrifolio-app/actions/workflows/node.js.yml/badge.svg)](https://github.com/Nutrifolio/nutrifolio-app/actions/workflows/node.js.yml)
+
 ## Prerequisites
 
 * [Node.js](https://nodejs.org/en/)
