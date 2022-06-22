@@ -1,24 +1,122 @@
+import propTypes from 'prop-types';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, ScrollView } from 'react-native';
+import NutriText from '../components/NutriText';
+import NutriLink from '../components/NutriLink';
+import { NutriForm, NutriFormField, SubmitButton } from '../components/forms';
+import * as Yup from 'yup';
+import colors from '../styles/colors';
+import routes from '../navigation/routes';
 
 import Screen from '../components/Screen';
 
-const RegisterScreen = () => {
+const validationSchema = Yup.object().shape({
+    firstName: Yup.string().required().label('First Name'),
+    lastName: Yup.string().required().label('Last Name'),
+    email: Yup.string().required().email().label('Email'),
+    password: Yup.string().required().min(4).label('Password'),
+    confirmPassword: Yup.string()
+        .oneOf([Yup.ref('password')], 'Passwords must match')
+        .required('Passwords must match'),
+});
+
+const RegisterScreen = (props) => {
+    const { navigation } = props;
+    const registerMessage = 'Sign up';
     return (
         <Screen>
-            <View style={styles.container}>
-                <Text>RegisterScreen</Text>
-            </View>
+            <ScrollView
+                style={styles.container}
+                contentContainerStyle={styles.contentContainer}
+            >
+                <NutriText style={styles.title}>{registerMessage}</NutriText>
+                <NutriForm
+                    initialValues={{
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        password: '',
+                        confirmPassword: '',
+                    }}
+                    onSubmit={(values) => console.log(values)}
+                    validationSchema={validationSchema}
+                >
+                    <NutriFormField
+                        placeholder='First Name'
+                        name='firstName'
+                        textContentType='givenName'
+                        iconName='account-circle'
+                    />
+
+                    <NutriFormField
+                        placeholder='Last Name'
+                        name='lastName'
+                        textContentType='familyName'
+                        iconName='account-circle'
+                    />
+
+                    <NutriFormField
+                        placeholder='Email'
+                        name='email'
+                        keyboardType='email-address'
+                        textContentType='emailAddress'
+                        iconName='email'
+                        autoCapitalize='none'
+                    />
+
+                    <NutriFormField
+                        placeholder='Password'
+                        name='password'
+                        autoCapitalize='none'
+                        iconName='lock'
+                        textContentType='password'
+                        secureTextEntry={true}
+                    />
+
+                    <NutriFormField
+                        placeholder='Confirm Password'
+                        name='confirmPassword'
+                        autoCapitalize='none'
+                        iconName='lock'
+                        textContentType='password'
+                        secureTextEntry={true}
+                    />
+
+                    <SubmitButton text='Create Account' />
+                </NutriForm>
+                <NutriLink
+                    text='Already have an account?'
+                    style={styles.link}
+                    onPress={() => navigation.navigate(routes.LOGIN)}
+                />
+            </ScrollView>
         </Screen>
     );
+};
+
+RegisterScreen.propTypes = {
+    navigation: propTypes.object,
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingHorizontal: 20,
         backgroundColor: '#fff',
+    },
+    contentContainer: {
+        flexGrow: 1,
         alignItems: 'center',
         justifyContent: 'center',
+    },
+    title: {
+        fontSize: 32,
+        color: colors.primary,
+        fontWeight: 'bold',
+        marginBottom: 30,
+    },
+    link: {
+        marginTop: 20,
     },
 });
 
