@@ -1,21 +1,22 @@
-import React from 'react'
-import NutriButton from './NutriButton'
-import propTypes from 'prop-types'
-import { StyleSheet } from 'react-native'
-import colors from '../../styles/colors'
+import React from 'react';
+import NutriButton from './NutriButton';
+import propTypes from 'prop-types';
+import { StyleSheet } from 'react-native';
+import colors from '../../styles/colors';
 
-const SmallButton = (props) =>
-        <NutriButton 
-            onPress={props.onPress}
-            text={props.text} 
-            buttonStyle={styles.buttonStyle}
-            textStyle={styles.textStyle}
-        />
+const SmallButton = (props) => (
+    <NutriButton
+        onPress={props.onPress}
+        text={props.text}
+        buttonStyle={styles.buttonStyle}
+        textStyle={styles.textStyle}
+    />
+);
 
 SmallButton.propTypes = {
     onPress: propTypes.func.isRequired,
-    text: propTypes.string.isRequired
-}
+    text: propTypes.string.isRequired,
+};
 
 const styles = StyleSheet.create({
     buttonStyle: {
@@ -28,8 +29,8 @@ const styles = StyleSheet.create({
     },
     textStyle: {
         color: colors.white,
-        fontSize: 20
-    }
-})
+        fontSize: 20,
+    },
+});
 
 export default SmallButton;

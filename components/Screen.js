@@ -4,21 +4,17 @@ import { StyleSheet } from 'react-native';
 import propTypes from 'prop-types';
 
 const Screen = (props) => {
-    return (
-        <SafeAreaView style={styles.screen}>
-            {props.children}
-        </SafeAreaView>
-    );
-}
+    return <SafeAreaView style={styles.screen}>{props.children}</SafeAreaView>;
+};
 
 Screen.propTypes = {
-    children: propTypes.node
-}
+    children: propTypes.node,
+};
 
 const styles = StyleSheet.create({
     screen: {
-        flex: 1
-    }
-})
+        flex: 1,
+    },
+});
 
 export default Screen;

@@ -1,7 +1,8 @@
-import React from 'react'
-import { StyleSheet, Text, View, Button } from 'react-native'
+import React from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import propTypes from 'prop-types';
 import Screen from '../components/Screen';
+import PrimaryButton from '../components/buttons/PrimaryButton';
 
 const HomeScreen = (props) => {
     return (
@@ -9,11 +10,15 @@ const HomeScreen = (props) => {
             <View style={styles.container}>
                 <Text>HomeScreen</Text>
                 <Button
-                    title="Go to product"
+                    title='Go to product'
                     onPress={() => props.navigation.navigate('ProductScreen')}
                 />
                 <Button
-                    title="Go to store"
+                    title='Go to store'
+                    onPress={() => props.navigation.navigate('StoreScreen')}
+                />
+                <PrimaryButton
+                    text='Press me'
                     onPress={() => props.navigation.navigate('StoreScreen')}
                 />
             </View>
@@ -22,8 +27,8 @@ const HomeScreen = (props) => {
 };
 
 HomeScreen.propTypes = {
-    navigation: propTypes.object
-}
+    navigation: propTypes.object,
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -31,7 +36,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    }
-})
+    },
+});
 
 export default HomeScreen;

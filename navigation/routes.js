@@ -5,5 +5,5 @@ export default Object.freeze({
     SEARCH: 'SearchScreen',
     PRODUCT: 'ProductScreen',
     STORE: 'StoreScreen',
-    PROFILE: 'ProfileScreen'
+    PROFILE: 'ProfileScreen',
 });

@@ -1,5 +1,5 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 import Screen from '../components/Screen';
 
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
-    }
-})
+    },
+});
 
 export default ProfileScreen;
