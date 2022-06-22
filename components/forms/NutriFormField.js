@@ -4,6 +4,7 @@ import NutriTextInput from '../NutriTextInput';
 import { useFormikContext } from 'formik';
 import ErrorMessage from './ErrorMessage';
 import propTypes from 'prop-types';
+import colors from '../../styles/colors';
 
 const AuthForm = (props) => {
     const { iconName, placeholder, name, ...otherProps } = props;
@@ -40,6 +41,8 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         marginBottom: 10,
+        color: colors.black,
+        fontSize: 16,
     },
 });
 

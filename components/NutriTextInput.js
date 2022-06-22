@@ -21,7 +21,7 @@ const NutriTextInput = (props) => {
                 name={iconName}
                 style={styles.icon}
                 color={colors.black}
-                size={16}
+                size={style.fontSize}
             />
         );
     } else {
@@ -34,7 +34,11 @@ const NutriTextInput = (props) => {
 
             <TextInput
                 placeholder={placeholder}
-                style={{ ...styles.textInput, fontFamily: font }}
+                style={{
+                    ...styles.textInput,
+                    fontSize: style.fontSize,
+                    fontFamily: font,
+                }}
                 selectionColor={colors.primary}
                 {...otherProps}
             />
@@ -58,7 +62,6 @@ const styles = StyleSheet.create({
     },
     textInput: {
         width: '100%',
-        fontSize: 16,
     },
 });
 
