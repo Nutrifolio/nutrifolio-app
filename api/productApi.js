@@ -6,8 +6,8 @@ const getFavorites = async (accessToken) =>
             Authorization: `Bearer ${accessToken}`,
         },
     })
-        .then((response) => response.json().favorites)
-        .catch((err) => err.json().detail);
+        .then((response) => response.json())
+        .catch((err) => err.json());
 
 const createFavorite = async (body, accessToken) =>
     fetch(endpoints.FAVORITES, {
@@ -19,7 +19,7 @@ const createFavorite = async (body, accessToken) =>
         },
     })
         .then((response) => response.json()) // Remember to update state.favorites
-        .catch((err) => err.json().detail);
+        .catch((err) => err.json());
 
 const deleteFavorite = async (product_id, accessToken) =>
     fetch(`${endpoints.FAVORITES}/${product_id}`, {
@@ -29,7 +29,7 @@ const deleteFavorite = async (product_id, accessToken) =>
         },
     })
         .then((response) => response.json()) // Remember to filter state.favorites
-        .catch((err) => err.json().detail);
+        .catch((err) => err.json());
 
 const getRecents = async (accessToken) =>
     fetch(endpoints.RECENTS, {
@@ -37,8 +37,8 @@ const getRecents = async (accessToken) =>
             Authorization: `Bearer ${accessToken}`,
         },
     })
-        .then((response) => response.json().recents)
-        .catch((err) => err.json().detail);
+        .then((response) => response.json())
+        .catch((err) => err.json());
 
 const createRecent = async (body, accessToken) =>
     fetch(endpoints.RECENTS, {
@@ -50,7 +50,7 @@ const createRecent = async (body, accessToken) =>
         },
     })
         .then((response) => response.json()) // Remember to update state.recents
-        .catch((err) => err.json().detail);
+        .catch((err) => err.json());
 
 const filterProducts = async (body) =>
     fetch(endpoints.FILTER, {
@@ -60,8 +60,8 @@ const filterProducts = async (body) =>
             'Content-Type': 'application/json',
         },
     })
-        .then((response) => response.json().products)
-        .catch((err) => err.json().detail);
+        .then((response) => response.json())
+        .catch((err) => err.json());
 
 export {
     createFavorite,

@@ -8,8 +8,8 @@ const signup = async (body) =>
             'Content-Type': 'application/json',
         },
     })
-        .then((response) => response.json().access_token)
-        .catch((err) => err.json().detail);
+        .then((response) => response.json())
+        .catch((err) => err.json());
 
 const login = async (body) =>
     fetch(endpoints.LOGIN, {
@@ -22,8 +22,8 @@ const login = async (body) =>
             'Content-Type': 'application/x-www-form-urlencoded',
         },
     })
-        .then((response) => response.json().access_token)
-        .catch((err) => err.json().detail);
+        .then((response) => response.json())
+        .catch((err) => err.json());
 
 const getUser = async (userId, accessToken) =>
     fetch(`${endpoints.USERS}/${userId}`, {
@@ -32,6 +32,6 @@ const getUser = async (userId, accessToken) =>
         },
     })
         .then((response) => response.json())
-        .catch((err) => err.json().detail);
+        .catch((err) => err.json());
 
 export { signup, login, getUser };
