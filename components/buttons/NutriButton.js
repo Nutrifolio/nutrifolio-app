@@ -12,7 +12,7 @@ const NutriButton = (props) => (
 // TODO Replace TouchableOpacity with more future-proof Pressable
 
 NutriButton.propTypes = {
-    buttonStyle: propTypes.object.isRequired,
+    buttonStyle: propTypes.object,
     textStyle: propTypes.object.isRequired,
     text: propTypes.string.isRequired,
     onPress: propTypes.func.isRequired,

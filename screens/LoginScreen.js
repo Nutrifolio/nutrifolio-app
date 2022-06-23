@@ -4,10 +4,10 @@ import NutriText from '../components/NutriText';
 import Screen from '../components/Screen';
 import colors from '../styles/colors';
 import { NutriForm, NutriFormField, SubmitButton } from '../components/forms';
-import NutriLink from '../components/NutriLink';
 import * as Yup from 'yup';
 import routes from '../navigation/routes';
 import propTypes from 'prop-types';
+import TextButton from '../components/buttons/TextButton';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label('Email'),
@@ -46,7 +46,7 @@ const LoginScreen = (props) => {
 
                     <SubmitButton text='Log in' />
                 </NutriForm>
-                <NutriLink
+                <TextButton
                     text='Not a member yet?'
                     style={styles.link}
                     onPress={() => navigation.navigate(routes.REGISTER)}
@@ -76,6 +76,8 @@ const styles = StyleSheet.create({
     },
     link: {
         marginTop: 20,
+        color: colors.primary,
+        textDecorationLine: 'underline',
     },
 });
 

@@ -2,13 +2,13 @@ import propTypes from 'prop-types';
 import React from 'react';
 import { StyleSheet, ScrollView } from 'react-native';
 import NutriText from '../components/NutriText';
-import NutriLink from '../components/NutriLink';
 import { NutriForm, NutriFormField, SubmitButton } from '../components/forms';
 import * as Yup from 'yup';
 import colors from '../styles/colors';
 import routes from '../navigation/routes';
 
 import Screen from '../components/Screen';
+import TextButton from '../components/buttons/TextButton';
 
 const validationSchema = Yup.object().shape({
     firstName: Yup.string().required().label('First Name'),
@@ -84,7 +84,7 @@ const RegisterScreen = (props) => {
 
                     <SubmitButton text='Create Account' />
                 </NutriForm>
-                <NutriLink
+                <TextButton
                     text='Already have an account?'
                     style={styles.link}
                     onPress={() => navigation.navigate(routes.LOGIN)}
@@ -117,6 +117,8 @@ const styles = StyleSheet.create({
     },
     link: {
         marginTop: 20,
+        color: colors.primary,
+        textDecorationLine: 'underline',
     },
 });
 
