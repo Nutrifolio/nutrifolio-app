@@ -30,7 +30,7 @@ const LoginScreen = (props) => {
             if (data) {
                 setError(data.detail);
             } else {
-                setError('An unexpected error occured.');
+                setError('An unexpected error occured. Try again later.');
             }
             await new Promise((resolve) =>
                 setTimeout(() => {
@@ -41,7 +41,7 @@ const LoginScreen = (props) => {
             return;
         }
 
-        setError(false);
+        setError(null);
         logIn(data.access_token);
     };
 
