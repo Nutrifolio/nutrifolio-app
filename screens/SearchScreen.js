@@ -15,16 +15,28 @@ const SearchScreen = () => {
     modalVisible ? (opacityStyle.opacity = 0.3) : (opacityStyle.opacity = 1);
 
     const handleToggleFilter = () => {
-        setPressed('filter');
-        setModalVisible(!modalVisible);
+        if (pressed !== 'filter') {
+            setPressed('filter');
+            setModalVisible(!modalVisible);
+        } else {
+            setPressed('none');
+        }
     };
 
     const handleToggleLiked = () => {
-        setPressed('liked');
+        if (pressed !== 'liked') {
+            setPressed('liked');
+        } else {
+            setPressed('none');
+        }
     };
 
     const handleToggleRecent = () => {
-        setPressed('recent');
+        if (pressed !== 'recent') {
+            setPressed('recent');
+        } else {
+            setPressed('none');
+        }
     };
 
     return (
