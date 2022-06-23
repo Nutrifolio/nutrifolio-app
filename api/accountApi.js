@@ -7,9 +7,7 @@ const signup = async (body) =>
         headers: {
             'Content-Type': 'application/json',
         },
-    })
-        .then((response) => response.json())
-        .catch((err) => err.json());
+    });
 
 const login = async (body) => {
     const formBody = Object.keys(body)
@@ -24,9 +22,7 @@ const login = async (body) => {
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-    })
-        .then((response) => response.json())
-        .catch((err) => err.json());
+    });
 };
 
 const getUser = async (userId, accessToken) =>
@@ -34,8 +30,6 @@ const getUser = async (userId, accessToken) =>
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
-    })
-        .then((response) => response.json())
-        .catch((err) => err.json());
+    });
 
 export { signup, login, getUser };
