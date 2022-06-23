@@ -10,13 +10,31 @@ const SearchScreen = () => {
     const [modalVisible, setModalVisible] = useState(false);
     const [pressed, setPressed] = useState('none');
 
-    const handlePress = (button) => {
-        setPressed(button);
+    // XXX Not allowing inline styles leads to this
+    let opacityStyle = { opacity: 1 };
+    modalVisible ? (opacityStyle.opacity = 0.3) : (opacityStyle.opacity = 1);
+
+    const handleToggleFilter = () => {
+        setPressed('filter');
+        setModalVisible(!modalVisible);
+    };
+
+    const handleToggleLiked = () => {
+        setPressed('liked');
+    };
+
+    const handleToggleRecent = () => {
+        setPressed('recent');
     };
 
     return (
         <Screen>
-            <View style={styles.container}>
+            <View
+                style={{
+                    ...styles.container,
+                    ...opacityStyle,
+                }}
+            >
                 <View style={styles.searchOptions}>
                     <NutriTextInput
                         iconName='magnify'
@@ -28,25 +46,25 @@ const SearchScreen = () => {
                             text='Filter'
                             icon='filter-outline'
                             pressed={pressed === 'filter'}
-                            onPress={() => setPressed('filter')}
+                            onPress={handleToggleFilter}
                         />
                         <FillableIconButton
                             text='Liked'
                             icon='heart-outline'
                             pressed={pressed === 'liked'}
-                            onPress={() => handlePress('liked')}
+                            onPress={handleToggleLiked}
                         />
                         <FillableIconButton
                             text='Recent'
                             icon='clock-outline'
                             pressed={pressed === 'recent'}
-                            onPress={() => handlePress('recent')}
+                            onPress={handleToggleRecent}
                         />
                     </View>
                 </View>
 
                 <FilterModal
-                    toggleModal={() => setModalVisible(!modalVisible)}
+                    toggleModal={() => handleToggleFilter()}
                     visible={modalVisible}
                 />
                 <Image
