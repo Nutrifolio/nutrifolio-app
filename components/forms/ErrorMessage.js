@@ -5,14 +5,13 @@ import colors from '../../styles/colors';
 import propTypes from 'prop-types';
 
 const ErrorMessage = (props) => {
-    if (!props.visible || !props.error) return null;
+    if (!props.error) return null;
 
     return <NutriText style={styles.error}>{props.error}</NutriText>;
 };
 
 ErrorMessage.propTypes = {
     error: propTypes.string,
-    visible: propTypes.bool,
 };
 
 const styles = StyleSheet.create({

@@ -10,6 +10,9 @@ const NutriFormField = (props) => {
     const { iconName, placeholder, name, ...otherProps } = props;
     const { setFieldTouched, handleChange, errors, touched } =
         useFormikContext();
+    let errorText;
+    if (touched[name]) errorText = errors[name];
+    else errorText = null;
     return (
         <View style={styles.container}>
             <NutriTextInput
@@ -20,7 +23,7 @@ const NutriFormField = (props) => {
                 onChangeText={handleChange(name)}
                 {...otherProps}
             />
-            <ErrorMessage error={errors[name]} visible={touched[name]} />
+            <ErrorMessage error={errorText} />
         </View>
     );
 };
@@ -34,7 +37,7 @@ NutriFormField.propTypes = {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        paddingBottom: 20,
+        paddingVertical: 10,
     },
     form: {
         borderBottomWidth: 1,
