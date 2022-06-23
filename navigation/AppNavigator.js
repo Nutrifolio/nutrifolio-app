@@ -3,20 +3,20 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import ProfileScreen from '../screens/ProfileScreen';
 import { HomeNavigator, SearchNavigator } from './ScreenNavigators';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useFonts, Rubik_400Regular } from '@expo-google-fonts/rubik';
+import { useFonts, Rubik_500Medium } from '@expo-google-fonts/rubik';
 import colors from '../styles/colors';
 
 const Tab = createBottomTabNavigator();
 
 const AppNavigator = () => {
-    let [fontsLoaded] = useFonts({ Rubik_400Regular });
+    let [fontsLoaded] = useFonts({ Rubik_500Medium });
 
     return (
         <Tab.Navigator
             screenOptions={{
                 headerShown: false,
                 tabBarLabelStyle: fontsLoaded
-                    ? { fontFamily: 'Rubik_400Regular' }
+                    ? { fontFamily: 'Rubik_500Medium' }
                     : {},
                 tabBarActiveTintColor: colors.primary,
             }}

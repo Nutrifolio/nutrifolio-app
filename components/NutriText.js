@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 import propTypes from 'prop-types';
 import {
     useFonts,
-    Rubik_400Regular,
+    Rubik_500Medium,
     Rubik_600SemiBold,
     Rubik_700Bold,
 } from '@expo-google-fonts/rubik';
@@ -24,7 +24,7 @@ const determineFont = (style) => {
                 fontFamily: 'Rubik_700Bold',
             };
         } else {
-            return { ...style, fontFamily: 'Rubik_400Regular' };
+            return { ...style, fontFamily: 'Rubik_500Medium' };
         }
     }
 };
@@ -34,7 +34,7 @@ const determineFont = (style) => {
  */
 const NutriText = (props) => {
     let [fontsLoaded] = useFonts({
-        Rubik_400Regular,
+        Rubik_500Medium,
         Rubik_600SemiBold,
         Rubik_700Bold,
     });
