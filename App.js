@@ -1,17 +1,61 @@
-import 'react-native-gesture-handler';
-import React, { useState } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import AuthNavigator from './navigation/AuthNavigator';
+import * as SplashScreen from 'expo-splash-screen';
 import AppNavigator from './navigation/AppNavigator';
-import navigationTheme from './styles/navigationTheme';
 import AuthContext from './auth/context';
+import AuthNavigator from './navigation/AuthNavigator';
+import AuthStorage from './auth/storage';
+import navigationTheme from './styles/navigationTheme';
+import React, { useState, useEffect, useCallback } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function App() {
     const [accessToken, setAccessToken] = useState();
+    const [isLoaded, setIsLoaded] = useState(false);
+
+    const restoreToken = async () => {
+        const token = await AuthStorage.getToken();
+        if (!token) return;
+        setAccessToken(token);
+    };
+
+    useEffect(() => {
+        async function prepare() {
+            try {
+                // Keep the splash screen visible while we fetch resources
+                await SplashScreen.preventAutoHideAsync();
+                // Get token from storage
+                await restoreToken();
+            } catch (e) {
+                console.warn(e);
+            } finally {
+                // Tell the application to render
+                setIsLoaded(true);
+            }
+        }
+
+        prepare();
+    }, []);
+
+    const onLayoutRootView = useCallback(async () => {
+        if (isLoaded) {
+            // This tells the splash screen to hide immediately! If we call this after
+            // `setIsLoaded`, then we may see a blank screen while the app is
+            // loading its initial state and rendering its first pixels. So instead,
+            // we hide the splash screen once we know the root view has already
+            // performed layout.
+            await SplashScreen.hideAsync();
+        }
+    }, [isLoaded]);
+
+    if (!isLoaded) {
+        return null;
+    }
 
     return (
         <AuthContext.Provider value={{ accessToken, setAccessToken }}>
-            <NavigationContainer theme={navigationTheme}>
+            <NavigationContainer
+                theme={navigationTheme}
+                onReady={onLayoutRootView}
+            >
                 {accessToken ? <AppNavigator /> : <AuthNavigator />}
             </NavigationContainer>
         </AuthContext.Provider>
