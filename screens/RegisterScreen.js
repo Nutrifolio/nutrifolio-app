@@ -86,7 +86,7 @@ const RegisterScreen = (props) => {
                 </NutriForm>
                 <TextButton
                     text='Already have an account?'
-                    style={styles.link}
+                    textStyle={styles.link}
                     onPress={() => navigation.navigate(routes.LOGIN)}
                 />
             </ScrollView>
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
         marginBottom: 30,
     },
     link: {
-        marginTop: 20,
+        marginTop: 50,
         color: colors.primary,
         textDecorationLine: 'underline',
     },
