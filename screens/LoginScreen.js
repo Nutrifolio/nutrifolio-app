@@ -1,5 +1,4 @@
 import * as Yup from 'yup';
-import AuthContext from '../auth/context';
 import colors from '../styles/colors';
 import ErrorMessage from '../components/forms/ErrorMessage';
 import NutriText from '../components/NutriText';
@@ -7,7 +6,8 @@ import propTypes from 'prop-types';
 import routes from '../navigation/routes';
 import Screen from '../components/Screen';
 import TextButton from '../components/buttons/TextButton';
-import React, { useState, useContext } from 'react';
+import useAuth from '../hooks/useAuth';
+import React, { useState } from 'react';
 import { login } from '../api/accountApi';
 import { StyleSheet, View } from 'react-native';
 import { NutriForm, NutriFormField, SubmitButton } from '../components/forms';
@@ -18,7 +18,7 @@ const validationSchema = Yup.object().shape({
 });
 
 const LoginScreen = (props) => {
-    const authContext = useContext(AuthContext);
+    const { logIn } = useAuth();
     const [loginError, setLoginError] = useState(false);
 
     const handleSubmit = async (values) => {
@@ -28,12 +28,11 @@ const LoginScreen = (props) => {
 
         if (!response.ok) {
             setLoginError(true);
-        } else {
-            setLoginError(false);
-            const accessToken = data['access_token'];
-            authContext.setAccessToken(accessToken);
-            console.log(accessToken);
+            return;
         }
+
+        setLoginError(false);
+        logIn(data.access_token);
     };
 
     const { navigation } = props;
