@@ -20,16 +20,15 @@ SmallButton.propTypes = {
 
 const styles = StyleSheet.create({
     buttonStyle: {
-        backgroundColor: colors.primary,
+        backgroundColor: colors.secondary,
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
-        paddingVertical: 10,
-        width: '100%',
+        padding: 5,
     },
     textStyle: {
-        color: colors.white,
-        fontSize: 20,
+        color: colors.primary,
+        fontSize: 14,
     },
 });
 
