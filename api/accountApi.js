@@ -11,19 +11,23 @@ const signup = async (body) =>
         .then((response) => response.json())
         .catch((err) => err.json());
 
-const login = async (body) =>
-    fetch(endpoints.LOGIN, {
+const login = async (body) => {
+    const formBody = Object.keys(body)
+        .map(
+            (key) =>
+                encodeURIComponent(key) + '=' + encodeURIComponent(body[key]),
+        )
+        .join('&');
+    return fetch(endpoints.LOGIN, {
         method: 'POST',
-        body: new URLSearchParams({
-            username: body.username,
-            password: body.password,
-        }),
+        body: formBody,
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
     })
         .then((response) => response.json())
         .catch((err) => err.json());
+};
 
 const getUser = async (userId, accessToken) =>
     fetch(`${endpoints.USERS}/${userId}`, {
