@@ -1,5 +1,5 @@
-import React from 'react'
-import { createStackNavigator } from '@react-navigation/stack'
+import React from 'react';
+import { createStackNavigator } from '@react-navigation/stack';
 import propTypes from 'prop-types';
 import HomeScreen from '../screens/HomeScreen';
 import SearchScreen from '../screens/SearchScreen';
@@ -13,31 +13,27 @@ const ScreenNavigator = (props) => {
         <Stack.Navigator
             initialRouteName={props.firstScreenName}
             screenOptions={{
-                headerShown: false,
-                headerTransparent: true
+                headerShown: true,
+                headerTransparent: true,
+                headerTitle: '',
             }}
         >
-            <Stack.Screen name="HomeScreen" component={HomeScreen}/>
-            <Stack.Screen name="SearchScreen" component={SearchScreen}/>
-            <Stack.Screen name="ProductScreen" component={ProductScreen}/>
-            <Stack.Screen name="StoreScreen" component={StoreScreen}/>
+            <Stack.Screen name='HomeScreen' component={HomeScreen} />
+            <Stack.Screen name='SearchScreen' component={SearchScreen} />
+            <Stack.Screen name='ProductScreen' component={ProductScreen} />
+            <Stack.Screen name='StoreScreen' component={StoreScreen} />
         </Stack.Navigator>
     );
 };
 
 ScreenNavigator.propTypes = {
-    firstScreenName: propTypes.string
-}
-
+    firstScreenName: propTypes.string,
+};
 
 export const HomeNavigator = () => {
-    return (
-        <ScreenNavigator firstScreenName='HomeScreen' />
-    );
+    return <ScreenNavigator firstScreenName='HomeScreen' />;
 };
 
 export const SearchNavigator = () => {
-    return (
-        <ScreenNavigator firstScreenName='SearchScreen' />
-    );
+    return <ScreenNavigator firstScreenName='SearchScreen' />;
 };
