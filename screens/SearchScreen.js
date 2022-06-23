@@ -1,16 +1,32 @@
-import React, { useState } from 'react';
-import { StyleSheet, Image, View } from 'react-native';
-import Screen from '../components/Screen';
-import FillableIconButton from '../components/buttons/FillableIconButton';
 import colors from '../styles/colors';
+import FillableIconButton from '../components/buttons/FillableIconButton';
 import FilterModal from '../components/FilterModal';
 import NutriTextInput from '../components/NutriTextInput';
+import Screen from '../components/Screen';
+import useLocation from '../hooks/useLocation';
+import React, { useState } from 'react';
+import { StyleSheet, Image, View, Alert, BackHandler } from 'react-native';
 
 const SearchScreen = () => {
+    const location = useLocation();
     const [modalVisible, setModalVisible] = useState(false);
     const [pressed, setPressed] = useState('none');
 
-    // XXX Not allowing inline styles leads to this
+    if (!location) {
+        Alert.alert(
+            'Location Access Required',
+            'Location permission is necessary for searching products and stores nearby',
+            [
+                {
+                    text: 'OK',
+                    onPress: () => BackHandler.exitApp(),
+                },
+            ],
+        );
+        return null;
+    }
+
+    // XXX Not allowing inline styles leads to this mess
     let opacityStyle = { opacity: 1 };
     modalVisible ? (opacityStyle.opacity = 0.3) : (opacityStyle.opacity = 1);
 
