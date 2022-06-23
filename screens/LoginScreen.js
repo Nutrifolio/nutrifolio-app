@@ -19,7 +19,7 @@ const validationSchema = Yup.object().shape({
 
 const LoginScreen = (props) => {
     const { logIn } = useAuth();
-    const [loginError, setLoginError] = useState(false);
+    const [error, setError] = useState();
 
     const handleSubmit = async (values) => {
         const body = { username: values.email, password: values.password };
@@ -27,11 +27,21 @@ const LoginScreen = (props) => {
         const data = await response.json();
 
         if (!response.ok) {
-            setLoginError(true);
+            if (data) {
+                setError(data.detail);
+            } else {
+                setError('An unexpected error occured.');
+            }
+            await new Promise((resolve) =>
+                setTimeout(() => {
+                    setError(null);
+                    return resolve;
+                }, 6000),
+            );
             return;
         }
 
-        setLoginError(false);
+        setError(false);
         logIn(data.access_token);
     };
 
@@ -46,10 +56,7 @@ const LoginScreen = (props) => {
                     onSubmit={handleSubmit}
                     validationSchema={validationSchema}
                 >
-                    <ErrorMessage
-                        error={'Error logging in'}
-                        visible={loginError}
-                    />
+                    <ErrorMessage error={error} />
                     <NutriFormField
                         placeholder='Email'
                         name='email'
