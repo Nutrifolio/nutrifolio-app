@@ -60,11 +60,11 @@ const ProductCard = (props) => {
 
 const styles = StyleSheet.create({
     container: {
-        height: 160,
+        height: 120,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        padding: 20,
+        marginVertical: 5,
     },
     detailsContainer: {
         height: '100%',
