@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      const state = {
+        access_token:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE2NTU5MTA3MzJ9.hsOl8Ho2vLWbueLL1LFlTg7Mk-bU14FDtkQJ7lJGTVY",
+        user: null,
+        favorites: [
+          {
+            name: "Chicken Sandwich",
+            description: "This is a chicken sandwich!",
+            image_url: "string",
+            calories: 450,
+            price: 4.29,
+            id: 1,
+            store: {
+              name: "North East",
+              logo_url: "url",
+              location: "Agiou Ioannou 65, Agia Paraskevi 153 42",
+              lat: 38.0069124,
+              lng: 23.8254561,
+              id: 1,
+            },
+          },
+          {
+            name: "Chicken Sandwich pro",
+            description: "This is a chicken sandwich!",
+            image_url: "string",
+            calories: 450,
+            price: 6,
+            id: 3,
+            store: {
+              name: "North East",
+              logo_url: "url",
+              location: "Agiou Ioannou 65, Agia Paraskevi 153 42",
+              lat: 38.0069124,
+              lng: 23.8254561,
+              id: 1,
+            },
+          },
+          {
+            name: "Ceasar salad",
+            description: "The best ceasar salad !!!",
+            image_url: "string",
+            calories: 340,
+            price: 5.29,
+            id: 7,
+            store: {
+              name: "North East",
+              logo_url: "url",
+              location: "Agiou Ioannou 65, Agia Paraskevi 153 42",
+              lat: 38.0069124,
+              lng: 23.8254561,
+              id: 1,
+            },
+          },
+          {
+            name: "Greek salad",
+            description: "The best salad !!!",
+            image_url: "string",
+            calories: 400,
+            price: 4.49,
+            id: 9,
+            store: {
+              name: "Starbucks",
+              logo_url: "string",
+              location: "Ir. Polytechniou 2, Agia Paraskevi",
+              lat: 38.0133722,
+              lng: 23.833636700000003,
+              id: 3,
+            },
+          },
+        ],
+        recents: [
+          {
+            name: "Chicken Sandwich",
+            description: "This is a chicken sandwich!",
+            image_url: "string",
+            calories: 450,
+            price: 4.29,
+            id: 1,
+            store: {
+              name: "North East",
+              logo_url: "url",
+              location: "Agiou Ioannou 65, Agia Paraskevi 153 42",
+              lat: 38.0069124,
+              lng: 23.8254561,
+              id: 1,
+            },
+          },
+          {
+            name: "Chicken Sandwich pro",
+            description: "This is a chicken sandwich!",
+            image_url: "string",
+            calories: 450,
+            price: 6,
+            id: 3,
+            store: {
+              name: "North East",
+              logo_url: "url",
+              location: "Agiou Ioannou 65, Agia Paraskevi 153 42",
+              lat: 38.0069124,
+              lng: 23.8254561,
+              id: 1,
+            },
+          },
+          {
+            name: "Chocolate Muffin",
+            description: "This is a Chocolate Muffin",
+            image_url: "string",
+            calories: 470,
+            price: 3.49,
+            id: 4,
+            store: {
+              name: "North East",
+              logo_url: "url",
+              location: "Agiou Ioannou 65, Agia Paraskevi 153 42",
+              lat: 38.0069124,
+              lng: 23.8254561,
+              id: 1,
+            },
+          },
+          {
+            name: "Chocolate Muffin pro",
+            description: "This is a Chocolate Muffin",
+            image_url: "string",
+            calories: 670,
+            price: 5.49,
+            id: 6,
+            store: {
+              name: "North East",
+              logo_url: "url",
+              location: "Agiou Ioannou 65, Agia Paraskevi 153 42",
+              lat: 38.0069124,
+              lng: 23.8254561,
+              id: 1,
+            },
+          },
+          {
+            name: "Ceasar salad",
+            description: "The best ceasar salad !!!",
+            image_url: "string",
+            calories: 340,
+            price: 5.29,
+            id: 7,
+            store: {
+              name: "North East",
+              logo_url: "url",
+              location: "Agiou Ioannou 65, Agia Paraskevi 153 42",
+              lat: 38.0069124,
+              lng: 23.8254561,
+              id: 1,
+            },
+          },
+        ],
+      };
+
+      const baseURL = "http://localhost:8000";
+
+      const filterProducts = async (body) => {
+        try {
+          const response = await fetch(`${baseURL}/filter`, {
+            method: "POST",
+            body: JSON.stringify(body),
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!response.ok) {
+            const responseError = await response.json();
+            const errorMessage = responseError.detail;
+            throw new Error(errorMessage);
+          }
+
+          const responseData = await response.json();
+
+          const products = responseData.products;
+          console.log(products);
+        } catch (error) {
+          console.log(error.message);
+        }
+      };
+
+      const body = {
+        lat: 38,
+        lng: 23.8,
+        // categories: ["string"],
+        max_dist: 10,
+        min_price: 0,
+        max_price: 10,
+        min_calories: 0,
+        max_calories: 1000,
+        min_protein: 0,
+        max_protein: 50,
+        min_carbs: 0,
+        max_carbs: 80,
+        min_fat: 0,
+        max_fat: 30,
+        sort_by: "price",
+        ordering: "ASC",
+      };
+
+      filterProducts(body);
+    </script>
+  </body>
+</html>
