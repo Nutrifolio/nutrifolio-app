@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TouchableOpacity, StyleSheet } from 'react-native';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import NutriText from '../NutriText';
+import { StyleSheet } from 'react-native';
 import colors from '../../styles/colors';
 import propTypes from 'prop-types';
+import NutriButtonIcon from './NutriButtonIcon';
 
 const FilterButton = (props) => {
     const [buttonColor, setButtonColor] = useState(colors.black);
@@ -22,12 +21,13 @@ const FilterButton = (props) => {
     });
 
     return (
-        <TouchableOpacity style={styles.container} onPress={props.onPress}>
-            <MaterialCommunityIcons name={icon} size={20} color={buttonColor} />
-            <NutriText style={{ ...styles.text, color: buttonColor }}>
-                {props.text}
-            </NutriText>
-        </TouchableOpacity>
+        <NutriButtonIcon
+            text={props.text}
+            icon={icon}
+            style={{ ...styles.content, color: buttonColor }}
+            containerStyle={styles.container}
+            onPress={props.onPress}
+        />
     );
 };
 
@@ -45,8 +45,7 @@ const styles = StyleSheet.create({
         hitSlop: 20,
         padding: 20,
     },
-    text: {
-        paddingLeft: 5,
+    content: {
         fontSize: 14,
         fontWeight: '600',
     },
