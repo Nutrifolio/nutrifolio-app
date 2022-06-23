@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, FlatList } from 'react-native';
-import propTypes from 'prop-types';
-import Screen from '../components/Screen';
-import NutriText from '../components/NutriText';
 import colors from '../styles/colors';
+import NutriText from '../components/NutriText';
 import ProductCard from '../components/ProductCard';
+import propTypes from 'prop-types';
+import React from 'react';
+import Screen from '../components/Screen';
 import SmallButton from '../components/buttons/SmallButton';
+import { StyleSheet, View, ScrollView } from 'react-native';
 
 const data = [
     {
@@ -46,22 +46,24 @@ const data = [
 const welcomeMessage = 'Welcome back,';
 const username = 'John';
 const titleList1 = 'FAVORITES';
+const titleList2 = 'RECENTS';
 const smallButtonText = 'View All';
 
 const HomeScreen = () => {
-    const [refreshing, setRefreshing] = useState(false);
-
     return (
         <Screen>
-            <View style={styles.container}>
-                <View style={styles.titleContainer}>
+            <ScrollView
+                style={styles.container}
+                contentContainerStyle={styles.contentContainer}
+            >
+                <View>
                     <NutriText style={styles.welcome}>
                         {welcomeMessage}
                     </NutriText>
                     <NutriText style={styles.username}>{username}</NutriText>
                 </View>
 
-                <View style={styles.listTitle}>
+                <View style={styles.listHeader}>
                     <NutriText style={styles.listTitle}>{titleList1}</NutriText>
                     <SmallButton
                         text={smallButtonText}
@@ -69,28 +71,42 @@ const HomeScreen = () => {
                     />
                 </View>
 
-                <FlatList
-                    ItemSeparatorComponent={() => (
-                        <View style={styles.divider} />
-                    )}
-                    refreshing={refreshing}
-                    onRefresh={() => setRefreshing(true)}
-                    data={data}
-                    keyExtractor={(item) => item.title}
-                    renderItem={({ item }) => (
-                        <ProductCard
-                            title={item.title}
-                            calories={item.calories}
-                            description={item.description}
-                            distance={item.distance}
-                            price={item.price}
-                            productImage={item.productImage}
-                            store={item.store}
-                            storeImage={item.storeImage}
-                        />
-                    )}
-                />
-            </View>
+                {data.slice(0, 2).map((item) => (
+                    <ProductCard
+                        key={data.indexOf(item)}
+                        title={item.title}
+                        calories={item.calories}
+                        description={item.description}
+                        distance={item.distance}
+                        price={item.price}
+                        productImage={item.productImage}
+                        store={item.store}
+                        storeImage={item.storeImage}
+                    />
+                ))}
+
+                <View style={styles.listHeader}>
+                    <NutriText style={styles.listTitle}>{titleList2}</NutriText>
+                    <SmallButton
+                        text={smallButtonText}
+                        onPress={() => console.log('pressed')}
+                    />
+                </View>
+
+                {data.slice(0, 2).map((item) => (
+                    <ProductCard
+                        key={data.indexOf(item)}
+                        title={item.title}
+                        calories={item.calories}
+                        description={item.description}
+                        distance={item.distance}
+                        price={item.price}
+                        productImage={item.productImage}
+                        store={item.store}
+                        storeImage={item.storeImage}
+                    />
+                ))}
+            </ScrollView>
         </Screen>
     );
 };
@@ -103,11 +119,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingHorizontal: 20,
-        paddingTop: 10,
         backgroundColor: '#fff',
     },
-    titleContainer: {
-        paddingBottom: 25,
+    contentContainer: {
+        flexGrow: 1,
+        paddingVertical: 10,
     },
     welcome: {
         fontSize: 28,
@@ -117,15 +133,14 @@ const styles = StyleSheet.create({
         fontSize: 28,
         color: colors.primary,
     },
-    listTitle: {
+    listHeader: {
         flexDirection: 'row',
         alignContent: 'center',
         justifyContent: 'space-between',
-        fontSize: 18,
+        paddingVertical: 25,
     },
-    divider: {
-        borderBottomColor: colors.grey,
-        borderBottomWidth: 0.2,
+    listTitle: {
+        fontSize: 18,
     },
 });
 
