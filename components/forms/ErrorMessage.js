@@ -11,8 +11,8 @@ const ErrorMessage = (props) => {
 };
 
 ErrorMessage.propTypes = {
-    error: propTypes.string.isRequired,
-    visible: propTypes.bool.isRequired,
+    error: propTypes.string,
+    visible: propTypes.bool,
 };
 
 const styles = StyleSheet.create({
