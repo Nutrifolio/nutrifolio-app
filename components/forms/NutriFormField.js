@@ -6,7 +6,7 @@ import ErrorMessage from './ErrorMessage';
 import propTypes from 'prop-types';
 import colors from '../../styles/colors';
 
-const AuthForm = (props) => {
+const NutriFormField = (props) => {
     const { iconName, placeholder, name, ...otherProps } = props;
     const { setFieldTouched, handleChange, errors, touched } =
         useFormikContext();
@@ -25,7 +25,7 @@ const AuthForm = (props) => {
     );
 };
 
-AuthForm.propTypes = {
+NutriFormField.propTypes = {
     iconName: propTypes.string,
     placeholder: propTypes.string,
     name: propTypes.string,
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AuthForm;
+export default NutriFormField;
