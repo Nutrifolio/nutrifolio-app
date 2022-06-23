@@ -1,26 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import propTypes from 'prop-types';
 import Screen from '../components/Screen';
-import PrimaryButton from '../components/buttons/PrimaryButton';
+import NutriText from '../components/NutriText';
 
-const HomeScreen = (props) => {
+const HomeScreen = () => {
+    const welcomeMessage = 'Welcome back,';
+    const username = 'John';
     return (
         <Screen>
             <View style={styles.container}>
-                <Text>HomeScreen</Text>
-                <Button
-                    title='Go to product'
-                    onPress={() => props.navigation.navigate('ProductScreen')}
-                />
-                <Button
-                    title='Go to store'
-                    onPress={() => props.navigation.navigate('StoreScreen')}
-                />
-                <PrimaryButton
-                    text='Press me'
-                    onPress={() => props.navigation.navigate('StoreScreen')}
-                />
+                <NutriText style={styles.welcome}>{welcomeMessage}</NutriText>
+                <NutriText style={styles.username}>{username}</NutriText>
             </View>
         </Screen>
     );
@@ -37,6 +28,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    welcome: {},
+    username: {},
 });
 
 export default HomeScreen;
