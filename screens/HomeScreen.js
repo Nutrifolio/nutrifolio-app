@@ -1,47 +1,15 @@
 import colors from '../styles/colors';
 import NutriText from '../components/NutriText';
+import { getFavorites, getRecents } from '../api/productApi';
 import ProductCard from '../components/ProductCard';
 import propTypes from 'prop-types';
-import React from 'react';
 import Screen from '../components/Screen';
 import SmallButton from '../components/buttons/SmallButton';
+import useApi from '../hooks/useApi';
+import useAuth from '../hooks/useAuth';
+import UserContext from '../auth/userContext';
+import React, { useEffect, useContext } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
-
-const data = [
-    {
-        title: 'Skatomyga',
-        description:
-            'Long text long text long text long textl ong text long text long txt',
-        calories: '140',
-        price: '13',
-        distance: '150m',
-        storeImage: 'https://reactnative.dev/img/tiny_logo.png',
-        store: 'To koytoyki toy sari',
-        productImage: 'https://reactnative.dev/img/tiny_logo.png',
-    },
-    {
-        title: 'Saliosaligkario',
-        description:
-            'Long text long text long text long textl ong text long text long txt',
-        calories: '140',
-        price: '13',
-        distance: '150m',
-        storeImage: 'https://reactnative.dev/img/tiny_logo.png',
-        store: 'To koytoyki toy sari',
-        productImage: 'https://reactnative.dev/img/tiny_logo.png',
-    },
-    {
-        title: 'Gyfterida',
-        description:
-            'Long text long text long text long textl ong text long text long txt',
-        calories: '140',
-        price: '13',
-        distance: '150m',
-        storeImage: 'https://reactnative.dev/img/tiny_logo.png',
-        store: 'To koytoyki toy sari',
-        productImage: 'https://reactnative.dev/img/tiny_logo.png',
-    },
-];
 
 const welcomeMessage = 'Welcome back,';
 const username = 'John';
@@ -50,6 +18,23 @@ const titleList2 = 'RECENTS';
 const smallButtonText = 'View All';
 
 const HomeScreen = () => {
+    const { products, setProducts } = useContext(UserContext);
+    const { accessToken } = useAuth();
+    const recentsApi = useApi(getRecents);
+    const favoritesApi = useApi(getFavorites);
+
+    useEffect(() => {
+        if (!products) {
+            recentsApi
+                .request(accessToken)
+                .then((results) => setProducts({ ...products, ...results }));
+            favoritesApi
+                .request(accessToken)
+                .then((results) => setProducts({ ...products, ...results }));
+            console.log(products);
+        }
+    }, [products]);
+
     return (
         <Screen>
             <ScrollView
@@ -71,19 +56,23 @@ const HomeScreen = () => {
                     />
                 </View>
 
-                {data.slice(0, 2).map((item) => (
-                    <ProductCard
-                        key={data.indexOf(item)}
-                        title={item.title}
-                        calories={item.calories}
-                        description={item.description}
-                        distance={item.distance}
-                        price={item.price}
-                        productImage={item.productImage}
-                        store={item.store}
-                        storeImage={item.storeImage}
-                    />
-                ))}
+                {products &&
+                    'favorites' in products &&
+                    products.favorites
+                        .slice(0, 2)
+                        .map((item) => (
+                            <ProductCard
+                                key={item.id}
+                                title={item.title}
+                                calories={item.calories}
+                                description={item.description}
+                                distance={item.distance}
+                                price={item.price}
+                                productImage={item.productImage}
+                                store={item.store}
+                                storeImage={item.storeImage}
+                            />
+                        ))}
 
                 <View style={styles.listHeader}>
                     <NutriText style={styles.listTitle}>{titleList2}</NutriText>
@@ -93,19 +82,23 @@ const HomeScreen = () => {
                     />
                 </View>
 
-                {data.slice(0, 2).map((item) => (
-                    <ProductCard
-                        key={data.indexOf(item)}
-                        title={item.title}
-                        calories={item.calories}
-                        description={item.description}
-                        distance={item.distance}
-                        price={item.price}
-                        productImage={item.productImage}
-                        store={item.store}
-                        storeImage={item.storeImage}
-                    />
-                ))}
+                {products &&
+                    'recents' in products &&
+                    products.recents
+                        .slice(0, 2)
+                        .map((item) => (
+                            <ProductCard
+                                key={item.id}
+                                title={item.title}
+                                calories={item.calories}
+                                description={item.description}
+                                distance={item.distance}
+                                price={item.price}
+                                productImage={item.productImage}
+                                store={item.store}
+                                storeImage={item.storeImage}
+                            />
+                        ))}
             </ScrollView>
         </Screen>
     );
