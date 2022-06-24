@@ -1,15 +1,17 @@
 import * as SplashScreen from 'expo-splash-screen';
 import AppNavigator from './navigation/AppNavigator';
-import AuthContext from './auth/context';
+import AuthContext from './auth/authContext';
 import AuthNavigator from './navigation/AuthNavigator';
 import AuthStorage from './auth/storage';
 import navigationTheme from './styles/navigationTheme';
+import UserContext from './auth/userContext';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useState, useEffect, useCallback } from 'react';
 
 export default function App() {
     const [accessToken, setAccessToken] = useState();
+    const [produts, setProducts] = useState();
     const [isLoaded, setIsLoaded] = useState(false);
 
     // Ignore Lottie deprecation warnings
@@ -56,12 +58,14 @@ export default function App() {
 
     return (
         <AuthContext.Provider value={{ accessToken, setAccessToken }}>
-            <NavigationContainer
-                theme={navigationTheme}
-                onReady={onLayoutRootView}
-            >
-                {accessToken ? <AppNavigator /> : <AuthNavigator />}
-            </NavigationContainer>
+            <UserContext.Provider value={{ produts, setProducts }}>
+                <NavigationContainer
+                    theme={navigationTheme}
+                    onReady={onLayoutRootView}
+                >
+                    {accessToken ? <AppNavigator /> : <AuthNavigator />}
+                </NavigationContainer>
+            </UserContext.Provider>
         </AuthContext.Provider>
     );
 }
