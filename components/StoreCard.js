@@ -7,6 +7,14 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const StoreCard = (props) => {
     const { name, logo_url, location, distance } = props;
+    let printableDist;
+    if (distance < 1) {
+        printableDist = Math.round(distance * 1000)
+            .toString()
+            .concat('m');
+    } else {
+        printableDist = distance.toFixed(2).concat('km');
+    }
     return (
         <View style={styles.container}>
             <View style={styles.detailsContainer}>
@@ -21,12 +29,12 @@ const StoreCard = (props) => {
                             size={14}
                             color='black'
                         />
-                        <NutriText>{distance}</NutriText>
+                        <NutriText>{printableDist}</NutriText>
                     </View>
                 </View>
             </View>
-            <View style={styles.productImageContainer}>
-                <Image source={{ uri: logo_url }} style={styles.productImage} />
+            <View style={styles.storeImageContainer}>
+                <Image source={{ uri: logo_url }} style={styles.storeImage} />
             </View>
         </View>
     );
@@ -73,7 +81,7 @@ const styles = StyleSheet.create({
     storeImage: {
         height: '70%',
         width: '85%',
-        resizeMode: 'cover',
+        resizeMode: 'contain',
         borderRadius: 10,
     },
 });
