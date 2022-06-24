@@ -3,6 +3,7 @@ import colors from '../styles/colors';
 import FillableIconButton from '../components/buttons/FillableIconButton';
 import FilterModal from '../components/filters/FilterModal';
 import NutriTextInput from '../components/NutriTextInput';
+import ProductCard from '../components/ProductCard';
 import Screen from '../components/Screen';
 import StoreCard from '../components/StoreCard';
 import useApi from '../hooks/useApi';
@@ -21,7 +22,8 @@ const SearchScreen = () => {
     const { location, loading: locationLoading } = useLocation();
     const { accessToken } = useAuth();
     const [searchText, setSearchText] = useState('');
-    const [results, setResults] = useState(null);
+    const [products, setProducts] = useState([]);
+    const [stores, setStores] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [pressed, setPressed] = useState('none');
 
@@ -42,7 +44,10 @@ const SearchScreen = () => {
         const { latitude, longitude } = location;
         body.lat = latitude;
         body.lng = longitude;
-        filterApi(body).then(setResults());
+        filterApi.request(body).then(setProducts(filterApi.data.products));
+        setModalVisible(false);
+        setPressed('none');
+        setStores([]);
     };
 
     const handleToggleLiked = () => {
@@ -50,7 +55,8 @@ const SearchScreen = () => {
             setPressed('liked');
             favoritesApi
                 .request(accessToken)
-                .then(setResults(favoritesApi.data.favorites));
+                .then(setProducts(favoritesApi.data.favorites));
+            setStores([]);
         } else {
             setPressed('none');
         }
@@ -61,7 +67,8 @@ const SearchScreen = () => {
             setPressed('recent');
             recentsApi
                 .request(accessToken)
-                .then(setResults(favoritesApi.data.recents));
+                .then(setProducts(favoritesApi.data.recents));
+            setStores([]);
         } else {
             setPressed('none');
         }
@@ -70,9 +77,11 @@ const SearchScreen = () => {
     const handleSearch = () => {
         storeApi
             .request(searchText, location.latitude, location.longitude, 200)
-            .then(setResults(storeApi.data.stores));
+            .then(setStores(storeApi.data.stores));
+        setProducts([]);
     };
 
+    // To anyone who reads this mess, I apologize
     return (
         <>
             <ActivityIndicator
@@ -80,6 +89,7 @@ const SearchScreen = () => {
                     storeApi.loading ||
                     recentsApi.loading ||
                     favoritesApi.loading ||
+                    filterApi.loading ||
                     locationLoading
                 }
             />
@@ -130,32 +140,63 @@ const SearchScreen = () => {
                         onSubmit={handleSubmitFilter}
                     />
 
-                    {!results && (
+                    {!products && !stores && (
                         <Image
                             source={require('../assets/no_results.png')}
                             style={styles.image}
                         />
                     )}
 
-                    {/* STORES */}
-                    <FlatList
-                        ItemSeparatorComponent={() => (
-                            <View style={styles.divider} />
-                        )}
-                        refreshing={locationLoading}
-                        onRefresh={() => handleSearch()}
-                        data={results}
-                        keyExtractor={(item) => item.name}
-                        renderItem={({ item }) => (
-                            <StoreCard
-                                key={item.id}
-                                name={item.name}
-                                distance={item.distance}
-                                location={item.location}
-                                logo_url={item.logo_url}
+                    {
+                        /* STORES */
+                        stores && stores.length > 0 && (
+                            <FlatList
+                                ItemSeparatorComponent={() => (
+                                    <View style={styles.divider} />
+                                )}
+                                refreshing={locationLoading}
+                                onRefresh={() => handleSearch()}
+                                data={stores}
+                                keyExtractor={(item) => item.name}
+                                renderItem={({ item }) => (
+                                    <StoreCard
+                                        key={item.id}
+                                        name={item.name}
+                                        distance={item.distance}
+                                        location={item.location}
+                                        logo_url={item.logo_url}
+                                    />
+                                )}
                             />
-                        )}
-                    />
+                        )
+                    }
+
+                    {
+                        /* PRODUCTS */
+                        products && products.length > 0 && (
+                            <FlatList
+                                ItemSeparatorComponent={() => (
+                                    <View style={styles.divider} />
+                                )}
+                                refreshing={locationLoading}
+                                onRefresh={() => {}}
+                                data={products}
+                                keyExtractor={(item) => item.id}
+                                renderItem={({ item }) => (
+                                    <ProductCard
+                                        title={item.name}
+                                        calories={item.calories}
+                                        description={item.description}
+                                        distance={item.distance}
+                                        price={item.price}
+                                        productImage={item.image_url}
+                                        store={item.store.name}
+                                        storeImage={item.store.logo_url}
+                                    />
+                                )}
+                            />
+                        )
+                    }
                 </View>
             </Screen>
         </>
