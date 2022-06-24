@@ -34,7 +34,7 @@ FilterButton.propTypes = {
     icon: propTypes.string.isRequired,
     iconFilled: propTypes.string.isRequired,
     text: propTypes.string.isRequired,
-    onPress: propTypes.func,
+    onPress: propTypes.func.isRequired,
     pressed: propTypes.bool,
 };
 
