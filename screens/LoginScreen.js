@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import { login } from '../api/accountApi';
 import { StyleSheet, View } from 'react-native';
 import { NutriForm, NutriFormField, SubmitButton } from '../components/forms';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const validationSchema = Yup.object().shape({
     email: Yup.string().required().email().label('Email'),
@@ -20,9 +21,11 @@ const validationSchema = Yup.object().shape({
 const LoginScreen = (props) => {
     const { logIn } = useAuth();
     const [error, setError] = useState();
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = async (values) => {
         const body = { username: values.email, password: values.password };
+        setLoading(true);
         const response = await login(body);
         const data = await response.json();
 
@@ -32,58 +35,57 @@ const LoginScreen = (props) => {
             } else {
                 setError('An unexpected error occured. Try again later.');
             }
-            await new Promise((resolve) =>
-                setTimeout(() => {
-                    setError(null);
-                    return resolve;
-                }, 6000),
-            );
+            setLoading(false);
             return;
         }
 
         setError(null);
+        setLoading(false);
         logIn(data.access_token);
     };
 
     const { navigation } = props;
     const welcomeMessage = 'Welcome Back';
     return (
-        <Screen>
-            <View style={styles.container}>
-                <NutriText style={styles.title}>{welcomeMessage}</NutriText>
-                <NutriForm
-                    initialValues={{ email: '', password: '' }}
-                    onSubmit={handleSubmit}
-                    validationSchema={validationSchema}
-                >
-                    <ErrorMessage error={error} />
-                    <NutriFormField
-                        placeholder='Email'
-                        name='email'
-                        keyboardType='email-address'
-                        textContentType='emailAddress'
-                        iconName='email'
-                        autoCapitalize='none'
-                    />
+        <>
+            <ActivityIndicator visible={loading} />
+            <Screen>
+                <View style={styles.container}>
+                    <NutriText style={styles.title}>{welcomeMessage}</NutriText>
+                    <NutriForm
+                        initialValues={{ email: '', password: '' }}
+                        onSubmit={handleSubmit}
+                        validationSchema={validationSchema}
+                    >
+                        <ErrorMessage error={error} />
+                        <NutriFormField
+                            placeholder='Email'
+                            name='email'
+                            keyboardType='email-address'
+                            textContentType='emailAddress'
+                            iconName='email'
+                            autoCapitalize='none'
+                        />
 
-                    <NutriFormField
-                        placeholder='Password'
-                        name='password'
-                        autoCapitalize='none'
-                        iconName='lock'
-                        textContentType='password'
-                        secureTextEntry={true}
-                    />
+                        <NutriFormField
+                            placeholder='Password'
+                            name='password'
+                            autoCapitalize='none'
+                            iconName='lock'
+                            textContentType='password'
+                            secureTextEntry={true}
+                        />
 
-                    <SubmitButton text='Log in' />
-                </NutriForm>
-                <TextButton
-                    text='Not a member yet?'
-                    textStyle={styles.link}
-                    onPress={() => navigation.navigate(routes.REGISTER)}
-                />
-            </View>
-        </Screen>
+                        <SubmitButton text='Log in' />
+                    </NutriForm>
+                    <TextButton
+                        text='Not a member yet?'
+                        textStyle={styles.link}
+                        onPress={() => navigation.navigate(routes.REGISTER)}
+                    />
+                </View>
+            </Screen>
+        </>
     );
 };
 

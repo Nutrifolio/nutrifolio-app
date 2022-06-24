@@ -11,6 +11,7 @@ import { signup } from '../api/accountApi';
 import { StyleSheet, ScrollView } from 'react-native';
 import { NutriForm, NutriFormField, SubmitButton } from '../components/forms';
 import ErrorMessage from '../components/forms/ErrorMessage';
+import ActivityIndicator from '../components/ActivityIndicator';
 
 const validationSchema = Yup.object().shape({
     firstName: Yup.string().required().label('First Name'),
@@ -22,10 +23,12 @@ const validationSchema = Yup.object().shape({
         .required('Passwords must match'),
 });
 
+const registerMessage = 'Sign up';
+
 const RegisterScreen = (props) => {
-    const { logIn } = useAuth();
     const [error, setError] = useState();
-    const registerMessage = 'Sign up';
+    const [loading, setLoading] = useState(false);
+    const { logIn } = useAuth();
 
     const handleSubmit = async (userInfo) => {
         const { firstName, lastName, email, password, confirmPassword } =
@@ -38,7 +41,7 @@ const RegisterScreen = (props) => {
             password: password,
             conf_password: confirmPassword,
         };
-
+        setLoading(true);
         const response = await signup(body);
         const data = await response.json();
 
@@ -49,89 +52,90 @@ const RegisterScreen = (props) => {
             } else {
                 setError('An unexpected error occured. Try again later.');
             }
-            await new Promise((resolve) =>
-                setTimeout(() => {
-                    setError(null);
-                    return resolve;
-                }, 6000),
-            );
+            setLoading(false);
             return;
         }
 
         // Log in
         setError(null);
+        setLoading(false);
         logIn(data.access_token);
     };
 
     return (
-        <Screen>
-            <ScrollView
-                style={styles.container}
-                contentContainerStyle={styles.contentContainer}
-            >
-                <NutriText style={styles.title}>{registerMessage}</NutriText>
-                <NutriForm
-                    initialValues={{
-                        firstName: '',
-                        lastName: '',
-                        email: '',
-                        password: '',
-                        confirmPassword: '',
-                    }}
-                    onSubmit={handleSubmit}
-                    validationSchema={validationSchema}
+        <>
+            <ActivityIndicator visible={loading} />
+            <Screen>
+                <ScrollView
+                    style={styles.container}
+                    contentContainerStyle={styles.contentContainer}
                 >
-                    <ErrorMessage error={error} />
-                    <NutriFormField
-                        placeholder='First Name'
-                        name='firstName'
-                        textContentType='givenName'
-                        iconName='account-circle'
-                    />
+                    <NutriText style={styles.title}>
+                        {registerMessage}
+                    </NutriText>
+                    <NutriForm
+                        initialValues={{
+                            firstName: '',
+                            lastName: '',
+                            email: '',
+                            password: '',
+                            confirmPassword: '',
+                        }}
+                        onSubmit={handleSubmit}
+                        validationSchema={validationSchema}
+                    >
+                        <ErrorMessage error={error} />
+                        <NutriFormField
+                            placeholder='First Name'
+                            name='firstName'
+                            textContentType='givenName'
+                            iconName='account-circle'
+                        />
 
-                    <NutriFormField
-                        placeholder='Last Name'
-                        name='lastName'
-                        textContentType='familyName'
-                        iconName='account-circle'
-                    />
+                        <NutriFormField
+                            placeholder='Last Name'
+                            name='lastName'
+                            textContentType='familyName'
+                            iconName='account-circle'
+                        />
 
-                    <NutriFormField
-                        placeholder='Email'
-                        name='email'
-                        keyboardType='email-address'
-                        textContentType='emailAddress'
-                        iconName='email'
-                        autoCapitalize='none'
-                    />
+                        <NutriFormField
+                            placeholder='Email'
+                            name='email'
+                            keyboardType='email-address'
+                            textContentType='emailAddress'
+                            iconName='email'
+                            autoCapitalize='none'
+                        />
 
-                    <NutriFormField
-                        placeholder='Password'
-                        name='password'
-                        autoCapitalize='none'
-                        iconName='lock'
-                        textContentType='password'
-                        secureTextEntry={true}
-                    />
+                        <NutriFormField
+                            placeholder='Password'
+                            name='password'
+                            autoCapitalize='none'
+                            iconName='lock'
+                            textContentType='password'
+                            secureTextEntry={true}
+                        />
 
-                    <NutriFormField
-                        placeholder='Confirm Password'
-                        name='confirmPassword'
-                        autoCapitalize='none'
-                        iconName='lock'
-                        textContentType='password'
-                        secureTextEntry={true}
-                    />
+                        <NutriFormField
+                            placeholder='Confirm Password'
+                            name='confirmPassword'
+                            autoCapitalize='none'
+                            iconName='lock'
+                            textContentType='password'
+                            secureTextEntry={true}
+                        />
 
-                    <SubmitButton text='Create Account' />
-                </NutriForm>
-                <TextButton
-                    text='Already have an account?'
-                    textStyle={styles.link}
-                    onPress={() => props.navigation.navigate(routes.LOGIN)}
-                />
-            </ScrollView>
-        </Screen>
+                        <SubmitButton text='Create Account' />
+                    </NutriForm>
+                    <TextButton
+                        text='Already have an account?'
+                        textStyle={styles.link}
+                        onPress={() => props.navigation.navigate(routes.LOGIN)}
+                    />
+                </ScrollView>
+            </Screen>
+        </>
     );
 };
 
