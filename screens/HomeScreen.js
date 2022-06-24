@@ -31,7 +31,6 @@ const HomeScreen = () => {
             favoritesApi
                 .request(accessToken)
                 .then((results) => setProducts({ ...products, ...results }));
-            console.log(products);
         }
     }, [products]);
 
