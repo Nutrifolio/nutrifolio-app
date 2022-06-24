@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image } from 'react-native';
+import { TouchableOpacity, View, StyleSheet, Image } from 'react-native';
 import React from 'react';
 import propTypes from 'prop-types';
 import NutriText from './NutriText';
@@ -16,7 +16,7 @@ const StoreCard = (props) => {
         printableDist = distance.toFixed(2).concat('km');
     }
     return (
-        <View style={styles.container}>
+        <TouchableOpacity style={styles.container} onPress={props.onPress}>
             <View style={styles.detailsContainer}>
                 <NutriText style={styles.title}>{name}</NutriText>
                 <NutriText numberOfLines={2} style={styles.description}>
@@ -36,7 +36,7 @@ const StoreCard = (props) => {
             <View style={styles.storeImageContainer}>
                 <Image source={{ uri: logo_url }} style={styles.storeImage} />
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
@@ -91,6 +91,7 @@ StoreCard.propTypes = {
     logo_url: propTypes.string.isRequired,
     location: propTypes.string.isRequired,
     distance: propTypes.number.isRequired,
+    onPress: propTypes.func.isRequired,
 };
 
 export default StoreCard;
