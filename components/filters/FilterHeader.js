@@ -1,8 +1,8 @@
 import { StyleSheet } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import NutriButtonIcon from './buttons/NutriButtonIcon';
+import NutriButtonIcon from '../buttons/NutriButtonIcon';
 import propTypes from 'prop-types';
-import colors from '../styles/colors';
+import colors from '../../styles/colors';
 
 const FilterHeader = (props) => {
     const [icon, setIcon] = useState('plus');
