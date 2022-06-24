@@ -12,8 +12,7 @@ const FilterButton = (props) => {
     useEffect(() => {
         if (props.pressed) {
             setButtonColor(colors.primary);
-            const cutAt = props.icon.search('-outline');
-            setIcon(props.icon.substring(0, cutAt));
+            setIcon(props.iconFilled);
         } else {
             setButtonColor(colors.black);
             setIcon(props.icon);
@@ -33,6 +32,7 @@ const FilterButton = (props) => {
 
 FilterButton.propTypes = {
     icon: propTypes.string.isRequired,
+    iconFilled: propTypes.string.isRequired,
     text: propTypes.string.isRequired,
     onPress: propTypes.func,
     pressed: propTypes.bool,
