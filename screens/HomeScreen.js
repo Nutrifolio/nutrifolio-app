@@ -19,7 +19,7 @@ const titleList2 = 'RECENTS';
 const smallButtonText = 'View All';
 
 const HomeScreen = ({ navigation }) => {
-    const { location, products, setProducts } = useContext(UserContext);
+    const { products, setProducts } = useContext(UserContext);
     const { accessToken } = useAuth();
     const recentsApi = useApi(getRecents);
     const favoritesApi = useApi(getFavorites);
@@ -72,7 +72,6 @@ const HomeScreen = ({ navigation }) => {
                             onPress={() =>
                                 navigation.navigate(routes.PRODUCT, {
                                     id: item.id,
-                                    location: location,
                                 })
                             }
                         />
