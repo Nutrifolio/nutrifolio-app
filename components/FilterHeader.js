@@ -7,12 +7,12 @@ import colors from '../styles/colors';
 const FilterHeader = (props) => {
     const [icon, setIcon] = useState('plus');
     useEffect(() => {
-        if (props.pressed) {
+        if (props.headerPressed) {
             setIcon('minus');
         } else {
             setIcon('plus');
         }
-    }, [props.pressed]);
+    }, [props.headerPressed]);
 
     return (
         <NutriButtonIcon
@@ -26,7 +26,7 @@ const FilterHeader = (props) => {
 };
 
 FilterHeader.propTypes = {
-    pressed: propTypes.bool.isRequired,
+    headerPressed: propTypes.bool.isRequired,
     text: propTypes.string.isRequired,
     onPress: propTypes.func.isRequired,
 };
