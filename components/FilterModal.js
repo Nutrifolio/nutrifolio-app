@@ -1,12 +1,58 @@
 import propTypes from 'prop-types';
-import React from 'react';
+import React, { useState } from 'react';
 import { View, ScrollView, Modal, StyleSheet } from 'react-native';
 import colors from '../styles/colors';
-import NutriButtonIcon from '../components/buttons/NutriButtonIcon';
+import FilterHeader from '../components/FilterHeader';
 import TextButton from './buttons/TextButton';
 import NutriText from './NutriText';
+import NutriSlider from './NutriSlider';
+import FillableIconButton from '../components/buttons/FillableIconButton';
 
+const checkboxes = {
+    Vegan: false,
+    Vegetarian: false,
+    'Gluten Free': false,
+    'Lactose Free': false,
+    'Sugar Free': false,
+    Pescatarian: false,
+};
+
+const sortBy = ['Price', 'Distance', 'Calories', 'Protein'];
+
+// To anyone who reads this ... I'm sorry
 const FilterModal = (props) => {
+    const [headerPressed, setHeaderPressed] = useState('none');
+    const [categories, setCategories] = useState(checkboxes);
+    const [distance, setDistance] = useState([0]);
+    const [price, setPrice] = useState([0, 5]);
+    const [calories, setCalories] = useState([0, 100]);
+    const [protein, setProtein] = useState([0, 100]);
+    const [carbs, setCarbs] = useState([0, 100]);
+    const [fats, setFats] = useState([0, 100]);
+    const [sort, setSort] = useState('');
+
+    const setFilter = (filterName) => {
+        if (headerPressed === filterName) {
+            setHeaderPressed('none');
+        } else {
+            setHeaderPressed(filterName);
+        }
+    };
+
+    const handleCategoryPress = (name) => {
+        let categoriesCopy = { ...categories };
+        categoriesCopy[name] = !categories[name];
+        setCategories(categoriesCopy);
+    };
+
+    const pressedSort = (sortName) => {
+        if (sort === sortName) {
+            setSort('');
+        } else {
+            setSort(sortName);
+        }
+    };
+
     const modalTitle = 'Filters';
 
     return (
@@ -36,62 +82,130 @@ const FilterModal = (props) => {
                             onPress={() => {}}
                         />
                     </View>
-                    <NutriButtonIcon
+                    <FilterHeader
                         icon='plus'
+                        headerPressed={headerPressed === 'categories'}
                         text='Categories'
-                        style={styles.filter}
-                        containerStyle={styles.filterContainer}
-                        onPress={() => {}}
+                        onPress={() => setFilter('categories')}
                     />
-                    <NutriButtonIcon
+                    {headerPressed === 'categories' && (
+                        <View>
+                            {Object.keys(checkboxes).map((title) => (
+                                <FillableIconButton
+                                    text={title}
+                                    key={title}
+                                    icon={'checkbox-blank-outline'}
+                                    iconFilled={'checkbox-marked'}
+                                    pressed={categories[title]}
+                                    onPress={() => handleCategoryPress(title)}
+                                />
+                            ))}
+                        </View>
+                    )}
+                    <FilterHeader
                         icon='plus'
+                        headerPressed={headerPressed === 'distance'}
                         text='Distance'
-                        style={styles.filter}
-                        containerStyle={styles.filterContainer}
-                        onPress={() => {}}
+                        onPress={() => setFilter('distance')}
                     />
-                    <NutriButtonIcon
+                    {headerPressed === 'distance' && (
+                        <NutriSlider
+                            max={100}
+                            suffix={'km'}
+                            onValuesChange={(newValue) => setDistance(newValue)}
+                            value={distance}
+                        />
+                    )}
+                    <FilterHeader
                         icon='plus'
+                        headerPressed={headerPressed === 'price'}
                         text='Price'
-                        style={styles.filter}
-                        containerStyle={styles.filterContainer}
-                        onPress={() => {}}
+                        onPress={() => setFilter('price')}
                     />
-                    <NutriButtonIcon
+                    {headerPressed === 'price' && (
+                        <NutriSlider
+                            max={50}
+                            suffix={'€'}
+                            onValuesChange={(newValue) => setPrice(newValue)}
+                            value={price}
+                        />
+                    )}
+                    <FilterHeader
                         icon='plus'
+                        headerPressed={headerPressed === 'calories'}
                         text='Calories'
-                        style={styles.filter}
-                        containerStyle={styles.filterContainer}
-                        onPress={() => {}}
+                        onPress={() => setFilter('calories')}
                     />
-                    <NutriButtonIcon
+                    {headerPressed === 'calories' && (
+                        <NutriSlider
+                            max={1000}
+                            suffix={'kcal'}
+                            onValuesChange={(newValue) => setCalories(newValue)}
+                            value={calories}
+                        />
+                    )}
+                    <FilterHeader
                         icon='plus'
+                        headerPressed={headerPressed === 'protein'}
                         text='Protein'
-                        style={styles.filter}
-                        containerStyle={styles.filterContainer}
-                        onPress={() => {}}
+                        onPress={() => setFilter('protein')}
                     />
-                    <NutriButtonIcon
+                    {headerPressed === 'protein' && (
+                        <NutriSlider
+                            max={400}
+                            suffix={'g'}
+                            onValuesChange={(newValue) => setProtein(newValue)}
+                            value={protein}
+                        />
+                    )}
+                    <FilterHeader
                         icon='plus'
+                        headerPressed={headerPressed === 'carbs'}
                         text='Carbohydrates'
-                        style={styles.filter}
-                        containerStyle={styles.filterContainer}
-                        onPress={() => {}}
+                        onPress={() => setFilter('carbs')}
                     />
-                    <NutriButtonIcon
+                    {headerPressed === 'carbs' && (
+                        <NutriSlider
+                            max={600}
+                            suffix={'g'}
+                            onValuesChange={(newValue) => setCarbs(newValue)}
+                            value={carbs}
+                        />
+                    )}
+                    <FilterHeader
                         icon='plus'
+                        headerPressed={headerPressed === 'fats'}
                         text='Fats'
-                        style={styles.filter}
-                        containerStyle={styles.filterContainer}
-                        onPress={() => {}}
+                        onPress={() => setFilter('fats')}
                     />
-                    <NutriButtonIcon
+                    {headerPressed === 'fats' && (
+                        <NutriSlider
+                            max={300}
+                            suffix={'g'}
+                            onValuesChange={(newValue) => setFats(newValue)}
+                            value={fats}
+                        />
+                    )}
+                    <FilterHeader
                         icon='plus'
+                        headerPressed={headerPressed === 'sort'}
                         text='Sort By'
-                        style={styles.filter}
-                        containerStyle={styles.filterContainer}
-                        onPress={() => {}}
+                        onPress={() => setFilter('sort')}
                     />
+                    {headerPressed === 'sort' && (
+                        <View>
+                            {sortBy.map((by) => (
+                                <FillableIconButton
+                                    text={by}
+                                    key={by}
+                                    icon={'checkbox-blank-circle-outline'}
+                                    iconFilled={'checkbox-marked-circle'}
+                                    pressed={sort === by}
+                                    onPress={() => pressedSort(by)}
+                                />
+                            ))}
+                        </View>
+                    )}
                 </View>
             </ScrollView>
         </Modal>
@@ -130,16 +244,6 @@ const styles = StyleSheet.create({
         fontSize: 16,
         color: colors.black,
         fontWeight: 'bold',
-    },
-    filterContainer: {
-        backgroundColor: colors.lightGrey,
-        padding: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-    filter: {
-        fontSize: 18,
-        color: colors.black,
     },
 });
 
