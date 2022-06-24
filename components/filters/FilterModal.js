@@ -75,11 +75,7 @@ const FilterModal = (props) => {
             ordering = 'ASC';
         }
 
-        let acceptedCategories = Object.keys(categories);
-        Object.keys(acceptedCategories).filter((x) => categories[x]);
-
         let reqBody = {
-            categories: acceptedCategories,
             max_dist: distance[0],
             min_price: price[0],
             max_price: price[1],
@@ -90,10 +86,22 @@ const FilterModal = (props) => {
             min_carbs: carbs[0],
             max_carbs: carbs[1],
             min_fat: fats[0],
-            max_at: fats[1],
+            max_fat: fats[1],
             sort_by: sort,
             ordering: ordering,
         };
+
+        if (sort.length === 0) {
+            delete reqBody.sort_by;
+            delete reqBody.ordering;
+        }
+
+        let acceptedCategories = Object.keys(categories).filter(
+            (x) => categories[x],
+        );
+
+        if (acceptedCategories.length > 0)
+            reqBody.categories = acceptedCategories;
 
         props.onSubmit(reqBody);
     };
