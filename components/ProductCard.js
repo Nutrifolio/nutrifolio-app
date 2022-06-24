@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image } from 'react-native';
+import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import propTypes from 'prop-types';
 import NutriText from './NutriText';
@@ -7,8 +7,16 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const ProductCard = (props) => {
     const kcal = 'kcal'; // TODO configure calorie units
+    let printableDist;
+    if (props.distance < 1) {
+        printableDist = Math.round(props.distance * 1000)
+            .toString()
+            .concat('m');
+    } else {
+        printableDist = props.distance.toFixed(2).concat('km');
+    }
     return (
-        <View style={styles.container}>
+        <TouchableOpacity onPress={props.onPress} style={styles.container}>
             <View style={styles.detailsContainer}>
                 <NutriText style={styles.title}>{props.title}</NutriText>
                 <NutriText numberOfLines={2} style={styles.description}>
@@ -17,11 +25,11 @@ const ProductCard = (props) => {
 
                 <View style={styles.valuesContainer}>
                     <View style={styles.values}>
-                        <NutriText>{props.calories}</NutriText>
+                        <NutriText>{props.calories.toString()}</NutriText>
                         <NutriText>{kcal}</NutriText>
                     </View>
                     <View style={styles.values}>
-                        <NutriText>{props.price}</NutriText>
+                        <NutriText>{props.price.toString()}</NutriText>
                         <MaterialCommunityIcons
                             name='currency-eur'
                             size={14}
@@ -34,7 +42,7 @@ const ProductCard = (props) => {
                             size={14}
                             color='black'
                         />
-                        <NutriText>{props.distance}</NutriText>
+                        <NutriText>{printableDist}</NutriText>
                     </View>
                 </View>
 
@@ -54,23 +62,24 @@ const ProductCard = (props) => {
                     style={styles.productImage}
                 />
             </View>
-        </View>
+        </TouchableOpacity>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        height: 110,
+        height: 120,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginVertical: 5,
+        paddingVertical: 10,
     },
     detailsContainer: {
         height: '100%',
         width: '65%',
         flexDirection: 'column',
         justifyContent: 'space-between',
+        paddingRight: 10,
     },
     title: {
         fontWeight: '600',
@@ -122,12 +131,13 @@ const styles = StyleSheet.create({
 ProductCard.propTypes = {
     title: propTypes.string,
     description: propTypes.string,
-    calories: propTypes.string,
-    price: propTypes.string,
-    distance: propTypes.string,
+    calories: propTypes.number,
+    price: propTypes.number,
+    distance: propTypes.number,
     storeImage: propTypes.string,
     store: propTypes.string,
     productImage: propTypes.string,
+    onPress: propTypes.func,
 };
 
 export default ProductCard;
