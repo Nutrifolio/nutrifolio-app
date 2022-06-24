@@ -4,12 +4,16 @@ import AuthContext from './auth/context';
 import AuthNavigator from './navigation/AuthNavigator';
 import AuthStorage from './auth/storage';
 import navigationTheme from './styles/navigationTheme';
-import React, { useState, useEffect, useCallback } from 'react';
+import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import React, { useState, useEffect, useCallback } from 'react';
 
 export default function App() {
     const [accessToken, setAccessToken] = useState();
     const [isLoaded, setIsLoaded] = useState(false);
+
+    // Ignore Lottie deprecation warnings
+    LogBox.ignoreLogs([/ViewPropTypes/]);
 
     const restoreToken = async () => {
         const token = await AuthStorage.getToken();
