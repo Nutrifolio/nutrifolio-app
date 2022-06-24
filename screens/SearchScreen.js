@@ -4,6 +4,8 @@ import FillableIconButton from '../components/buttons/FillableIconButton';
 import FilterModal from '../components/filters/FilterModal';
 import NutriTextInput from '../components/NutriTextInput';
 import ProductCard from '../components/ProductCard';
+import propTypes from 'prop-types';
+import routes from '../navigation/routes';
 import Screen from '../components/Screen';
 import StoreCard from '../components/StoreCard';
 import useApi from '../hooks/useApi';
@@ -14,7 +16,7 @@ import { searchStore } from '../api/storeApi';
 import { filterProducts, getFavorites, getRecents } from '../api/productApi';
 import { StyleSheet, Image, View, FlatList } from 'react-native';
 
-const SearchScreen = () => {
+const SearchScreen = ({ navigation }) => {
     const filterApi = useApi(filterProducts);
     const favoritesApi = useApi(getFavorites);
     const recentsApi = useApi(getRecents);
@@ -140,12 +142,13 @@ const SearchScreen = () => {
                         onSubmit={handleSubmitFilter}
                     />
 
-                    {!products && !stores && (
-                        <Image
-                            source={require('../assets/no_results.png')}
-                            style={styles.image}
-                        />
-                    )}
+                    {!(products && products.length > 0) &&
+                        !(stores && stores.length) && (
+                            <Image
+                                source={require('../assets/no_results.png')}
+                                style={styles.image}
+                            />
+                        )}
 
                     {
                         /* STORES */
@@ -157,7 +160,7 @@ const SearchScreen = () => {
                                 refreshing={locationLoading}
                                 onRefresh={() => handleSearch()}
                                 data={stores}
-                                keyExtractor={(item) => item.name}
+                                keyExtractor={(item) => item.id}
                                 renderItem={({ item }) => (
                                     <StoreCard
                                         key={item.id}
@@ -165,6 +168,11 @@ const SearchScreen = () => {
                                         distance={item.distance}
                                         location={item.location}
                                         logo_url={item.logo_url}
+                                        onPress={() =>
+                                            navigation.navigate(routes.STORE, {
+                                                id: item.id,
+                                            })
+                                        }
                                     />
                                 )}
                             />
@@ -192,6 +200,14 @@ const SearchScreen = () => {
                                         productImage={item.image_url}
                                         store={item.store.name}
                                         storeImage={item.store.logo_url}
+                                        onPress={() =>
+                                            navigation.navigate(
+                                                routes.PRODUCT,
+                                                {
+                                                    id: item.id,
+                                                },
+                                            )
+                                        }
                                     />
                                 )}
                             />
@@ -201,6 +217,10 @@ const SearchScreen = () => {
             </Screen>
         </>
     );
+};
+
+SearchScreen.propTypes = {
+    navigation: propTypes.object,
 };
 
 const styles = StyleSheet.create({
