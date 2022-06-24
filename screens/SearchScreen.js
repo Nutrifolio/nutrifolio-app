@@ -46,7 +46,8 @@ const SearchScreen = ({ navigation }) => {
         const { latitude, longitude } = location;
         body.lat = latitude;
         body.lng = longitude;
-        filterApi.request(body).then(setProducts(filterApi.data.products));
+        filterApi.request(body);
+        setProducts(filterApi.data.products);
         setModalVisible(false);
         setPressed('none');
         setStores([]);
@@ -55,9 +56,8 @@ const SearchScreen = ({ navigation }) => {
     const handleToggleLiked = () => {
         if (pressed !== 'liked') {
             setPressed('liked');
-            favoritesApi
-                .request(accessToken)
-                .then(setProducts(favoritesApi.data.favorites));
+            favoritesApi.request(accessToken);
+            setProducts(favoritesApi.data.favorites);
             setStores([]);
         } else {
             setPressed('none');
@@ -67,9 +67,8 @@ const SearchScreen = ({ navigation }) => {
     const handleToggleRecent = () => {
         if (pressed !== 'recent') {
             setPressed('recent');
-            recentsApi
-                .request(accessToken)
-                .then(setProducts(favoritesApi.data.recents));
+            recentsApi.request(accessToken);
+            setProducts(favoritesApi.data.recents);
             setStores([]);
         } else {
             setPressed('none');
@@ -77,9 +76,13 @@ const SearchScreen = ({ navigation }) => {
     };
 
     const handleSearch = () => {
-        storeApi
-            .request(searchText, location.latitude, location.longitude, 200)
-            .then(setStores(storeApi.data.stores));
+        storeApi.request(
+            searchText,
+            location.latitude,
+            location.longitude,
+            200,
+        );
+        setStores(storeApi.data.stores);
         setProducts([]);
     };
 
@@ -168,7 +171,6 @@ const SearchScreen = ({ navigation }) => {
                                         onPress={() =>
                                             navigation.navigate(routes.STORE, {
                                                 id: item.id,
-                                                location: location,
                                             })
                                         }
                                     />
@@ -201,7 +203,6 @@ const SearchScreen = ({ navigation }) => {
                                                 routes.PRODUCT,
                                                 {
                                                     id: item.id,
-                                                    location: location,
                                                 },
                                             )
                                         }
