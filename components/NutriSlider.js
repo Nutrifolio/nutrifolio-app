@@ -15,6 +15,7 @@ const NutriSlider = (props) => {
                 max={props.max}
                 valueSuffix={props.suffix}
                 onValuesChange={props.onValuesChange}
+                values={props.value}
             />
         </View>
     );
@@ -23,6 +24,7 @@ const NutriSlider = (props) => {
 NutriSlider.propTypes = {
     max: propTypes.number.isRequired,
     onValuesChange: propTypes.func.isRequired,
+    value: propTypes.arrayOf(propTypes.number),
     suffix: propTypes.string,
 };
 
