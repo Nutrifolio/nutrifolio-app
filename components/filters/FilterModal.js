@@ -1,12 +1,12 @@
 import propTypes from 'prop-types';
 import React, { useState } from 'react';
 import { View, ScrollView, Modal, StyleSheet } from 'react-native';
-import colors from '../styles/colors';
+import colors from '../../styles/colors';
 import FilterHeader from '../components/FilterHeader';
-import TextButton from './buttons/TextButton';
-import NutriText from './NutriText';
+import TextButton from '../buttons/TextButton';
+import NutriText from '../NutriText';
 import NutriSlider from './NutriSlider';
-import FillableIconButton from '../components/buttons/FillableIconButton';
+import FillableIconButton from '../buttons/FillableIconButton';
 
 const checkboxes = {
     Vegan: false,

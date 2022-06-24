@@ -1,7 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import React from 'react';
-import colors from '../styles/colors';
+import colors from '../../styles/colors';
 import propTypes from 'prop-types';
 
 const NutriSlider = (props) => {
