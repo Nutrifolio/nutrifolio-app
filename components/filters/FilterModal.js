@@ -75,7 +75,11 @@ const FilterModal = (props) => {
             ordering = 'ASC';
         }
 
+        let acceptedCategories = Object.keys(categories);
+        Object.keys(acceptedCategories).filter((x) => categories[x]);
+
         let reqBody = {
+            categories: acceptedCategories,
             max_dist: distance[0],
             min_price: price[0],
             max_price: price[1],
