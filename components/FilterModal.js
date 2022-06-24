@@ -53,6 +53,47 @@ const FilterModal = (props) => {
         }
     };
 
+    const handleClear = () => {
+        let checkboxesCopy = { ...checkboxes };
+        Object.keys(checkboxes).forEach((box) => (checkboxesCopy[box] = false));
+
+        setHeaderPressed('none');
+        setCategories(checkboxesCopy);
+        setDistance([0]);
+        setPrice([0, 5]);
+        setCalories([0, 100]);
+        setProtein([0, 100]);
+        setCarbs([0, 100]);
+        setSort('');
+    };
+
+    const handleDone = () => {
+        let ordering;
+        if (sort === 'Protein') {
+            ordering = 'DESC';
+        } else {
+            ordering = 'ASC';
+        }
+
+        let reqBody = {
+            max_dist: distance[0],
+            min_price: price[0],
+            max_price: price[1],
+            min_calories: calories[0],
+            max_calories: calories[1],
+            min_protein: protein[0],
+            max_protein: protein[1],
+            min_carbs: carbs[0],
+            max_carbs: carbs[1],
+            min_fat: fats[0],
+            max_at: fats[1],
+            sort_by: sort,
+            ordering: ordering,
+        };
+
+        props.onSubmit(reqBody);
+    };
+
     const modalTitle = 'Filters';
 
     return (
@@ -71,7 +112,7 @@ const FilterModal = (props) => {
                         <TextButton
                             text='Clear'
                             textStyle={styles.headerButton}
-                            onPress={() => {}}
+                            onPress={() => handleClear()}
                         />
                         <NutriText style={styles.headerTitle}>
                             {modalTitle}
@@ -79,7 +120,7 @@ const FilterModal = (props) => {
                         <TextButton
                             text='Done'
                             textStyle={styles.headerButton}
-                            onPress={() => {}}
+                            onPress={() => handleDone()}
                         />
                     </View>
                     <FilterHeader
@@ -213,8 +254,9 @@ const FilterModal = (props) => {
 };
 
 FilterModal.propTypes = {
-    visible: propTypes.bool,
-    toggleModal: propTypes.func,
+    visible: propTypes.bool.isRequired,
+    toggleModal: propTypes.func.isRequired,
+    onSubmit: propTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
