@@ -1,5 +1,6 @@
 import * as Location from 'expo-location';
 import { useState, useEffect } from 'react';
+import { Alert, BackHandler } from 'react-native';
 
 const useLocation = () => {
     const [location, setLocation] = useState(null);
@@ -9,16 +10,38 @@ const useLocation = () => {
             // Ask location permissions
             let { granted } =
                 await Location.requestForegroundPermissionsAsync();
-            if (!granted) return;
-
+            if (!granted) {
+                Alert.alert(
+                    'Location Access Required',
+                    'Location permission is necessary for nearby search.',
+                    [
+                        {
+                            text: 'OK',
+                            onPress: () => BackHandler.exitApp(),
+                        },
+                    ],
+                );
+                return;
+            }
             // Get user location
             const {
                 coords: { latitude, longitude },
             } = await Location.getCurrentPositionAsync({});
-
             setLocation({ latitude, longitude });
         } catch (e) {
             console.warn(e);
+            Alert.alert(
+                'Location Access Required',
+                'Location permission is necessary for nearby search.',
+                [
+                    {
+                        text: 'Enable Location Tracking',
+                        onPress: () => {
+                            Location.enableNetworkProviderAsync();
+                        },
+                    },
+                ],
+            );
         }
     };
 
