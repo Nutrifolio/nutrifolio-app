@@ -4,9 +4,11 @@ import { Alert, BackHandler } from 'react-native';
 
 const useLocation = () => {
     const [location, setLocation] = useState(null);
+    const [loading, setLoading] = useState(false);
 
     const getLocation = async () => {
         try {
+            setLoading(true);
             // Ask location permissions
             let { granted } =
                 await Location.requestForegroundPermissionsAsync();
@@ -27,6 +29,7 @@ const useLocation = () => {
             const {
                 coords: { latitude, longitude },
             } = await Location.getCurrentPositionAsync({});
+            setLoading(false);
             setLocation({ latitude, longitude });
         } catch (e) {
             console.warn(e);
@@ -49,7 +52,7 @@ const useLocation = () => {
         getLocation();
     }, []);
 
-    return location;
+    return { location, loading };
 };
 
 export default useLocation;
