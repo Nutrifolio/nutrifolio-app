@@ -23,7 +23,7 @@ const FilterButton = (props) => {
         <NutriButtonIcon
             text={props.text}
             icon={icon}
-            style={{ ...styles.content, color: buttonColor }}
+            style={{ ...styles.content, color: buttonColor, ...props.style }}
             containerStyle={styles.container}
             onPress={props.onPress}
         />
@@ -36,6 +36,7 @@ FilterButton.propTypes = {
     text: propTypes.string.isRequired,
     onPress: propTypes.func.isRequired,
     pressed: propTypes.bool,
+    style: propTypes.object,
 };
 
 const styles = StyleSheet.create({
