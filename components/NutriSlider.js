@@ -16,6 +16,7 @@ const NutriSlider = (props) => {
                 valueSuffix={props.suffix}
                 onValuesChange={props.onValuesChange}
                 values={props.value}
+                allowOverlap={false}
             />
         </View>
     );
