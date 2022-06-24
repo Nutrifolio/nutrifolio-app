@@ -10,18 +10,18 @@ import Screen from '../components/Screen';
 import StoreCard from '../components/StoreCard';
 import useApi from '../hooks/useApi';
 import useAuth from '../hooks/useAuth';
-import useLocation from '../hooks/useLocation';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { searchStore } from '../api/storeApi';
 import { filterProducts, getFavorites, getRecents } from '../api/productApi';
 import { StyleSheet, Image, View, FlatList } from 'react-native';
+import UserContext from '../auth/userContext';
 
 const SearchScreen = ({ navigation }) => {
     const filterApi = useApi(filterProducts);
     const favoritesApi = useApi(getFavorites);
     const recentsApi = useApi(getRecents);
     const storeApi = useApi(searchStore);
-    const { location, loading: locationLoading } = useLocation();
+    const { location } = useContext(UserContext);
     const { accessToken } = useAuth();
     const [searchText, setSearchText] = useState('');
     const [products, setProducts] = useState([]);
@@ -91,8 +91,7 @@ const SearchScreen = ({ navigation }) => {
                     storeApi.loading ||
                     recentsApi.loading ||
                     favoritesApi.loading ||
-                    filterApi.loading ||
-                    locationLoading
+                    filterApi.loading
                 }
             />
             <Screen>
@@ -157,8 +156,6 @@ const SearchScreen = ({ navigation }) => {
                                 ItemSeparatorComponent={() => (
                                     <View style={styles.divider} />
                                 )}
-                                refreshing={locationLoading}
-                                onRefresh={() => handleSearch()}
                                 data={stores}
                                 keyExtractor={(item) => item.id}
                                 renderItem={({ item }) => (
@@ -171,6 +168,7 @@ const SearchScreen = ({ navigation }) => {
                                         onPress={() =>
                                             navigation.navigate(routes.STORE, {
                                                 id: item.id,
+                                                location: location,
                                             })
                                         }
                                     />
@@ -186,8 +184,6 @@ const SearchScreen = ({ navigation }) => {
                                 ItemSeparatorComponent={() => (
                                     <View style={styles.divider} />
                                 )}
-                                refreshing={locationLoading}
-                                onRefresh={() => {}}
                                 data={products}
                                 keyExtractor={(item) => item.id}
                                 renderItem={({ item }) => (
@@ -205,6 +201,7 @@ const SearchScreen = ({ navigation }) => {
                                                 routes.PRODUCT,
                                                 {
                                                     id: item.id,
+                                                    location: location,
                                                 },
                                             )
                                         }

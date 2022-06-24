@@ -8,10 +8,12 @@ import UserContext from './auth/userContext';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useState, useEffect, useCallback } from 'react';
+import useLocation from './hooks/useLocation';
 
 export default function App() {
     const [accessToken, setAccessToken] = useState();
     const [produts, setProducts] = useState();
+    const { location } = useLocation();
     const [isLoaded, setIsLoaded] = useState(false);
 
     // Ignore Lottie deprecation warnings
@@ -58,7 +60,7 @@ export default function App() {
 
     return (
         <AuthContext.Provider value={{ accessToken, setAccessToken }}>
-            <UserContext.Provider value={{ produts, setProducts }}>
+            <UserContext.Provider value={{ location, produts, setProducts }}>
                 <NavigationContainer
                     theme={navigationTheme}
                     onReady={onLayoutRootView}
