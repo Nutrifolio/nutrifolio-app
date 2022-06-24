@@ -53,6 +53,9 @@ const filterProducts = async (body) =>
         },
     });
 
+const getProduct = async (product_id) =>
+    fetch(`${endpoints.PRODUCTS}/${product_id}`);
+
 export {
     createFavorite,
     createRecent,
@@ -60,4 +63,5 @@ export {
     filterProducts,
     getFavorites,
     getRecents,
+    getProduct,
 };
