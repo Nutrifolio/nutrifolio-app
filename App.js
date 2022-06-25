@@ -11,9 +11,9 @@ import React, { useState, useEffect, useCallback } from 'react';
 import useLocation from './hooks/useLocation';
 
 export default function App() {
-    const [accessToken, setAccessToken] = useState();
-    const [produts, setProducts] = useState();
-    const { location } = useLocation();
+    const [accessToken, setAccessToken] = useState(null);
+    const [products, setProducts] = useState({ favorites: [], recents: [] });
+    const { location } = useLocation(null);
     const [isLoaded, setIsLoaded] = useState(false);
 
     // Ignore Lottie deprecation warnings
@@ -60,7 +60,7 @@ export default function App() {
 
     return (
         <AuthContext.Provider value={{ accessToken, setAccessToken }}>
-            <UserContext.Provider value={{ location, produts, setProducts }}>
+            <UserContext.Provider value={{ location, products, setProducts }}>
                 <NavigationContainer
                     theme={navigationTheme}
                     onReady={onLayoutRootView}
