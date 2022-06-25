@@ -6,22 +6,25 @@ const useApi = (apiFunc) => {
     const [loading, setLoading] = useState(false);
 
     const request = async (...args) => {
-        setLoading(true);
-        const response = await apiFunc(...args);
-        const json = await response.json();
-        if (!response.ok) {
-            if (json) {
-                setError(json.detail);
+        try {
+            setLoading(true);
+            const response = await apiFunc(...args);
+            const json = await response.json();
+            if (!response.ok) {
+                if (json) {
+                    setError(json.detail);
+                } else {
+                    setError('An unexpected error occured. Try again later.');
+                }
             } else {
-                setError('An unexpected error occured. Try again later.');
+                setData(json);
             }
-        } else {
-            setData(json);
+            setLoading(false);
+            return response;
+        } catch (error) {
+            console.error(error);
         }
-        setLoading(false);
-        return response;
     };
-
     return { data, error, loading, request };
 };
 
