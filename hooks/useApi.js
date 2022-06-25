@@ -8,16 +8,16 @@ const useApi = (apiFunc) => {
     const request = async (...args) => {
         setLoading(true);
         const response = await apiFunc(...args);
-        const data = await response.json();
+        const json = await response.json();
         setLoading(false);
         if (!response.ok) {
-            if (data) {
-                setError(data.detail);
+            if (json) {
+                setError(json.detail);
             } else {
                 setError('An unexpected error occured. Try again later.');
             }
         } else {
-            setData(data);
+            setData(json);
         }
         return response;
     };
