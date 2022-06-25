@@ -23,9 +23,9 @@ const sortBy = ['Price', 'Distance', 'Calories', 'Protein'];
 const FilterModal = (props) => {
     const [headerPressed, setHeaderPressed] = useState('none');
     const [categories, setCategories] = useState(checkboxes);
-    const [distance, setDistance] = useState([0]);
+    const [distance, setDistance] = useState([50]);
     const [price, setPrice] = useState([0, 5]);
-    const [calories, setCalories] = useState([0, 100]);
+    const [calories, setCalories] = useState([0, 300]);
     const [protein, setProtein] = useState([0, 100]);
     const [carbs, setCarbs] = useState([0, 100]);
     const [fats, setFats] = useState([0, 100]);
