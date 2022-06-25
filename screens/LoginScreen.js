@@ -7,42 +7,31 @@ import routes from '../navigation/routes';
 import Screen from '../components/Screen';
 import TextButton from '../components/buttons/TextButton';
 import useAuth from '../hooks/useAuth';
-import React, { useState } from 'react';
-import { login } from '../api/accountApi';
+import React, { useEffect } from 'react';
+import { login as loginApi } from '../api/accountApi';
 import { StyleSheet, View } from 'react-native';
 import { NutriForm, NutriFormField, SubmitButton } from '../components/forms';
 import ActivityIndicator from '../components/ActivityIndicator';
+import useApi from '../hooks/useApi';
 
 const validationSchema = Yup.object().shape({
-    email: Yup.string().required().email().label('Email'),
+    username: Yup.string().required().email().label('Email'),
     password: Yup.string().required().label('Password'),
 });
 
 const LoginScreen = (props) => {
+    const { data, error, loading, request } = useApi(loginApi);
     const { logIn } = useAuth();
-    const [error, setError] = useState();
-    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (values) => {
-        const body = { username: values.email, password: values.password };
-        setLoading(true);
-        const response = await login(body);
-        const data = await response.json();
-
-        if (!response.ok) {
-            if (data) {
-                setError(data.detail);
-            } else {
-                setError('An unexpected error occured. Try again later.');
-            }
-            setLoading(false);
-            return;
-        }
-
-        setError(null);
-        setLoading(false);
-        logIn(data.access_token);
+    const handleSubmit = async (credentials) => {
+        await request(credentials);
     };
+
+    useEffect(() => {
+        if (data) {
+            logIn(data.access_token);
+        }
+    }, [data]);
 
     const { navigation } = props;
     const welcomeMessage = 'Welcome Back';
@@ -53,14 +42,14 @@ const LoginScreen = (props) => {
                 <View style={styles.container}>
                     <NutriText style={styles.title}>{welcomeMessage}</NutriText>
                     <NutriForm
-                        initialValues={{ email: '', password: '' }}
+                        initialValues={{ username: '', password: '' }}
                         onSubmit={handleSubmit}
                         validationSchema={validationSchema}
                     >
                         <ErrorMessage error={error} />
                         <NutriFormField
                             placeholder='Email'
-                            name='email'
+                            name='username'
                             keyboardType='email-address'
                             textContentType='emailAddress'
                             iconName='email'

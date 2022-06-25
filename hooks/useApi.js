@@ -1,15 +1,14 @@
 import { useState } from 'react';
 
 const useApi = (apiFunc) => {
-    const [data, setData] = useState([]);
-    const [error, setError] = useState(false);
+    const [data, setData] = useState(null);
+    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const request = async (...args) => {
         setLoading(true);
         const response = await apiFunc(...args);
         const json = await response.json();
-        setLoading(false);
         if (!response.ok) {
             if (json) {
                 setError(json.detail);
@@ -19,6 +18,7 @@ const useApi = (apiFunc) => {
         } else {
             setData(json);
         }
+        setLoading(false);
         return response;
     };
 
