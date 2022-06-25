@@ -1,8 +1,8 @@
 import { View, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import propTypes from 'prop-types';
-import NutriText from './NutriText';
-import colors from '../styles/colors';
+import NutriText from '../NutriText';
+import colors from '../../styles/colors';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 const ProductCard = (props) => {
