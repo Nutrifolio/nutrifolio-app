@@ -12,7 +12,11 @@ const useApi = (apiFunc) => {
             const json = await response.json();
             if (!response.ok) {
                 if (json) {
-                    setError(json.detail);
+                    if (typeof json === 'string') {
+                        setError(json.detail);
+                    } else {
+                        setError(json.detail[0]);
+                    }
                 } else {
                     setError('An unexpected error occured. Try again later.');
                 }
