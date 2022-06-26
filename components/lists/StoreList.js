@@ -5,7 +5,7 @@ import routes from '../../navigation/routes';
 import StoreCard from './StoreCard';
 import { StyleSheet, FlatList, View } from 'react-native';
 
-const StoreList = (props) => {
+const StoreList = (props) => (
     <FlatList
         ItemSeparatorComponent={() => <View style={styles.divider} />}
         data={props.data}
@@ -26,8 +26,8 @@ const StoreList = (props) => {
                 }
             />
         )}
-    />;
-};
+    />
+);
 
 StoreList.propTypes = {
     data: propTypes.array.isRequired,
