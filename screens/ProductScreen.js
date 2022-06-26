@@ -300,7 +300,7 @@ const styles = StyleSheet.create({
     map: {
         width: '100%',
         height: 300,
-        paddingBottom: 10,
+        marginVertical: 10,
     },
 });
 
