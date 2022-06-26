@@ -1,4 +1,4 @@
-import MapView from 'react-native-maps';
+import MapView, { Marker } from 'react-native-maps';
 import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import FillableIconButton from '../components/buttons/FillableIconButton';
@@ -177,7 +177,14 @@ const ProductScreen = (props) => {
                                 longitudeDelta: 0.0421,
                             }}
                             style={styles.map}
-                        />
+                        >
+                            <Marker
+                                coordinate={{
+                                    latitude: location.latitude,
+                                    longitude: location.longitude,
+                                }}
+                            />
+                        </MapView>
                     </View>
                 </View>
             </ScrollView>
