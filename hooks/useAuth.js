@@ -1,9 +1,11 @@
 import { useContext } from 'react';
 import AuthContext from '../auth/authContext';
 import AuthStorage from '../auth/storage';
+import UserContext from '../auth/userContext';
 
 const useAuth = () => {
     const { accessToken, setAccessToken } = useContext(AuthContext);
+    const { setProducts } = useContext(UserContext);
 
     const logIn = (accessToken) => {
         setAccessToken(accessToken);
@@ -11,6 +13,7 @@ const useAuth = () => {
     };
 
     const logOut = () => {
+        setProducts({ favorites: [], recents: [] });
         setAccessToken(null);
         AuthStorage.removeToken();
     };
