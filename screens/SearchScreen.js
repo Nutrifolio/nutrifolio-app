@@ -3,35 +3,79 @@ import colors from '../styles/colors';
 import FillableIconButton from '../components/buttons/FillableIconButton';
 import FilterModal from '../components/filters/FilterModal';
 import NutriTextInput from '../components/NutriTextInput';
-import ProductCard from '../components/ProductCard';
 import propTypes from 'prop-types';
-import routes from '../navigation/routes';
 import Screen from '../components/Screen';
-import StoreCard from '../components/StoreCard';
 import useApi from '../hooks/useApi';
 import useAuth from '../hooks/useAuth';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { searchStore } from '../api/storeApi';
 import { filterProducts, getFavorites, getRecents } from '../api/productApi';
-import { StyleSheet, Image, View, FlatList } from 'react-native';
+import { StyleSheet, Image, View } from 'react-native';
 import UserContext from '../auth/userContext';
+import ProductList from '../components/lists/ProductList';
+import StoreList from '../components/lists/StoreList';
 
 const SearchScreen = ({ navigation }) => {
     const filterApi = useApi(filterProducts);
     const favoritesApi = useApi(getFavorites);
     const recentsApi = useApi(getRecents);
-    const storeApi = useApi(searchStore);
+    const storesApi = useApi(searchStore);
     const { location } = useContext(UserContext);
     const { accessToken } = useAuth();
     const [searchText, setSearchText] = useState('');
-    const [products, setProducts] = useState([]);
-    const [stores, setStores] = useState([]);
     const [modalVisible, setModalVisible] = useState(false);
     const [pressed, setPressed] = useState('none');
+    const [data, setData] = useState([]);
+    const [render, setRender] = useState('');
 
-    // XXX Not allowing inline styles leads to this mess
-    let opacityStyle = { opacity: 1 };
-    modalVisible ? (opacityStyle.opacity = 0.3) : (opacityStyle.opacity = 1);
+    useEffect(() => {
+        if (filterApi.data && filterApi.data.products && !filterApi.loading) {
+            setData(filterApi.data.products);
+            setRender('products');
+        }
+        return () => {
+            setData([]);
+            setRender('');
+        };
+    }, [filterApi.data, filterApi.loading]);
+
+    useEffect(() => {
+        if (
+            favoritesApi.data &&
+            favoritesApi.data.favorites &&
+            !favoritesApi.loading
+        ) {
+            setData(favoritesApi.data.favorites);
+            setRender('products');
+        }
+        return () => {
+            setData([]);
+            setRender('');
+        };
+    }, [favoritesApi.data, favoritesApi.loading]);
+
+    useEffect(() => {
+        if (recentsApi.data && recentsApi.data.recents && !recentsApi.loading) {
+            setData(recentsApi.data.recents);
+            setRender('products');
+        }
+        return () => {
+            setData([]);
+            setRender('');
+        };
+    }, [recentsApi.data, recentsApi.loading]);
+
+    useEffect(() => {
+        if (storesApi.data && storesApi.data.stores && !storesApi.loading) {
+            setData(storesApi.data.stores);
+            console.log(storesApi.data.stores);
+            setRender('stores');
+        }
+        return () => {
+            setData([]);
+            setRender('');
+        };
+    }, [storesApi.data, storesApi.loading]);
 
     const handleToggleFilter = () => {
         if (pressed !== 'filter') {
@@ -42,56 +86,51 @@ const SearchScreen = ({ navigation }) => {
         }
     };
 
-    const handleSubmitFilter = (body) => {
+    const handleSubmitFilter = async (body) => {
         const { latitude, longitude } = location;
         body.lat = latitude;
         body.lng = longitude;
-        filterApi.request(body);
-        setProducts(filterApi.data.products);
         setModalVisible(false);
-        setPressed('none');
-        setStores([]);
+        await filterApi.request(body);
     };
 
-    const handleToggleLiked = () => {
-        if (pressed !== 'liked') {
-            setPressed('liked');
-            favoritesApi.request(accessToken);
-            setProducts(favoritesApi.data.favorites);
-            setStores([]);
+    const handleToggleLiked = async () => {
+        if (pressed !== 'favorites') {
+            setPressed('favorites');
+            await favoritesApi.request(accessToken);
         } else {
             setPressed('none');
         }
     };
 
-    const handleToggleRecent = () => {
-        if (pressed !== 'recent') {
-            setPressed('recent');
-            recentsApi.request(accessToken);
-            setProducts(favoritesApi.data.recents);
-            setStores([]);
+    const handleToggleRecent = async () => {
+        if (pressed !== 'recents') {
+            setPressed('recents');
+            await recentsApi.request(accessToken);
         } else {
             setPressed('none');
         }
     };
 
-    const handleSearch = () => {
-        storeApi.request(
+    const handleSearch = async () => {
+        await storesApi.request(
             searchText,
             location.latitude,
             location.longitude,
             200,
         );
-        setStores(storeApi.data.stores);
-        setProducts([]);
     };
+
+    // XXX Not allowing inline styles leads to this mess
+    let opacityStyle = { opacity: 1 };
+    modalVisible ? (opacityStyle.opacity = 0.3) : (opacityStyle.opacity = 1);
 
     // To anyone who reads this mess, I apologize
     return (
         <>
             <ActivityIndicator
                 visible={
-                    storeApi.loading ||
+                    storesApi.loading ||
                     recentsApi.loading ||
                     favoritesApi.loading ||
                     filterApi.loading
@@ -112,6 +151,7 @@ const SearchScreen = ({ navigation }) => {
                             onSubmitEditing={handleSearch}
                             defaultValue={searchText}
                             onChangeText={(newText) => setSearchText(newText)}
+                            onPressIn={() => setPressed('search')}
                         />
                         <View style={styles.buttonContainer}>
                             <FillableIconButton
@@ -125,92 +165,36 @@ const SearchScreen = ({ navigation }) => {
                                 text='Liked'
                                 icon='heart-outline'
                                 iconFilled='heart'
-                                pressed={pressed === 'liked'}
+                                pressed={pressed === 'favorites'}
                                 onPress={handleToggleLiked}
                             />
                             <FillableIconButton
                                 text='Recent'
                                 icon='clock-outline'
                                 iconFilled='clock'
-                                pressed={pressed === 'recent'}
+                                pressed={pressed === 'recents'}
                                 onPress={handleToggleRecent}
                             />
                         </View>
                     </View>
-
                     <FilterModal
                         toggleModal={() => handleToggleFilter()}
                         visible={modalVisible}
                         onSubmit={handleSubmitFilter}
                     />
+                    {!(data && data.length > 0) && (
+                        <Image
+                            source={require('../assets/no_results.png')}
+                            style={styles.image}
+                        />
+                    )}
+                    {render === 'stores' && (
+                        <StoreList data={data} navigation={navigation} />
+                    )}
 
-                    {!(products && products.length > 0) &&
-                        !(stores && stores.length) && (
-                            <Image
-                                source={require('../assets/no_results.png')}
-                                style={styles.image}
-                            />
-                        )}
-
-                    {
-                        /* STORES */
-                        stores && stores.length > 0 && (
-                            <FlatList
-                                ItemSeparatorComponent={() => (
-                                    <View style={styles.divider} />
-                                )}
-                                data={stores}
-                                keyExtractor={(item) => item.id}
-                                renderItem={({ item }) => (
-                                    <StoreCard
-                                        key={item.id}
-                                        name={item.name}
-                                        distance={item.distance}
-                                        location={item.location}
-                                        logo_url={item.logo_url}
-                                        onPress={() =>
-                                            navigation.navigate(routes.STORE, {
-                                                id: item.id,
-                                            })
-                                        }
-                                    />
-                                )}
-                            />
-                        )
-                    }
-
-                    {
-                        /* PRODUCTS */
-                        products && products.length > 0 && (
-                            <FlatList
-                                ItemSeparatorComponent={() => (
-                                    <View style={styles.divider} />
-                                )}
-                                data={products}
-                                keyExtractor={(item) => item.id}
-                                renderItem={({ item }) => (
-                                    <ProductCard
-                                        title={item.name}
-                                        calories={item.calories}
-                                        description={item.description}
-                                        distance={item.distance}
-                                        price={item.price}
-                                        productImage={item.image_url}
-                                        store={item.store.name}
-                                        storeImage={item.store.logo_url}
-                                        onPress={() =>
-                                            navigation.navigate(
-                                                routes.PRODUCT,
-                                                {
-                                                    id: item.id,
-                                                },
-                                            )
-                                        }
-                                    />
-                                )}
-                            />
-                        )
-                    }
+                    {render === 'products' && (
+                        <ProductList data={data} navigation={navigation} />
+                    )}
                 </View>
             </Screen>
         </>
@@ -249,10 +233,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         resizeMode: 'contain',
-    },
-    divider: {
-        borderBottomColor: colors.grey,
-        borderBottomWidth: 0.2,
     },
 });
 
