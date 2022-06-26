@@ -14,8 +14,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { getFavorites, getRecents } from '../api/productApi';
 import { StyleSheet, View, ScrollView } from 'react-native';
 
-const welcomeMessage = 'Welcome back,';
-const username = 'John';
+const welcomeMessage = 'Welcome';
 const titleList1 = 'FAVORITES';
 const titleList2 = 'RECENTS';
 const initialLimit = 2;
@@ -95,9 +94,6 @@ const HomeScreen = (props) => {
                     <View>
                         <NutriText style={styles.welcome}>
                             {welcomeMessage}
-                        </NutriText>
-                        <NutriText style={styles.username}>
-                            {username}
                         </NutriText>
                     </View>
 
