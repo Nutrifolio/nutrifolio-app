@@ -15,9 +15,7 @@ const createFavorite = async (body, accessToken) =>
             Authorization: `Bearer ${accessToken}`,
             'Content-Type': 'application/json',
         },
-    })
-        .then((response) => response.json()) // Remember to update state.favorites
-        .catch((err) => err.json());
+    });
 
 const deleteFavorite = async (product_id, accessToken) =>
     fetch(`${endpoints.FAVORITES}/${product_id}`, {
