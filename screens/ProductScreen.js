@@ -1,3 +1,4 @@
+import MapView from 'react-native-maps';
 import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import FillableIconButton from '../components/buttons/FillableIconButton';
@@ -168,6 +169,15 @@ const ProductScreen = (props) => {
                             {locTitle}
                         </NutriText>
                         <NutriText>{product.store.location}</NutriText>
+                        <MapView
+                            initialRegion={{
+                                latitude: location.latitude,
+                                longitude: location.longitude,
+                                latitudeDelta: 0.0922,
+                                longitudeDelta: 0.0421,
+                            }}
+                            style={styles.map}
+                        />
                     </View>
                 </View>
             </ScrollView>
@@ -286,6 +296,11 @@ const styles = StyleSheet.create({
     locationTitle: {
         fontSize: 15,
         paddingBottom: 5,
+    },
+    map: {
+        width: '100%',
+        height: 300,
+        paddingBottom: 10,
     },
 });
 
