@@ -171,8 +171,8 @@ const ProductScreen = (props) => {
                         <NutriText>{product.store.location}</NutriText>
                         <MapView
                             initialRegion={{
-                                latitude: location.latitude,
-                                longitude: location.longitude,
+                                latitude: product.store.lat,
+                                longitude: product.store.lng,
                                 latitudeDelta: 0.0922,
                                 longitudeDelta: 0.0421,
                             }}
@@ -180,8 +180,8 @@ const ProductScreen = (props) => {
                         >
                             <Marker
                                 coordinate={{
-                                    latitude: location.latitude,
-                                    longitude: location.longitude,
+                                    latitude: product.store.lat,
+                                    longitude: product.store.lng,
                                 }}
                             />
                         </MapView>
