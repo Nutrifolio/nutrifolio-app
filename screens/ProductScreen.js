@@ -19,9 +19,13 @@ const ProductScreen = (props) => {
     const fetchProduct = useApi(getProduct);
 
     useEffect(() => {
-        if (!product) fetchProduct.request(id);
+        fetchProduct.request(id);
+    }, []);
+
+    useEffect(() => {
         setProduct(fetchProduct.data);
-    }, [id]);
+        return () => setProduct(null);
+    }, [fetchProduct.data]);
 
     const calculateDistance = () => {
         const productLocation = {
@@ -36,68 +40,68 @@ const ProductScreen = (props) => {
         }
     };
 
+    if (!product) {
+        return <ActivityIndicator />;
+    }
     return (
-        <>
-            <ActivityIndicator visible={fetchProduct.loading} />
-            <Screen>
-                <ScrollView
-                    style={styles.scrollContainer}
-                    contentContainerStyle={styles.container}
-                >
-                    <View style={styles.likeContainer}>
-                        <FillableIconButton
-                            icon='heart-outline'
-                            iconFilled='heart'
-                            text=''
-                            onPress={() => {}}
+        <Screen>
+            <ScrollView
+                style={styles.scrollContainer}
+                contentContainerStyle={styles.container}
+            >
+                <View style={styles.likeContainer}>
+                    <FillableIconButton
+                        icon='heart-outline'
+                        iconFilled='heart'
+                        text=''
+                        onPress={() => {}}
+                    />
+                </View>
+                <View style={styles.mainInfo}>
+                    <View style={styles.imageContainer}>
+                        <Image
+                            source={{ uri: product.image_url }}
+                            style={styles.image}
                         />
                     </View>
-                    <View style={styles.mainInfo}>
-                        <View style={styles.imageContainer}>
-                            <Image
-                                source={{ uri: fetchProduct.data.image_url }}
-                                style={styles.image}
+                    <NutriText style={styles.productName}>
+                        {product.name}
+                    </NutriText>
+                    <View style={styles.valuesContainer}>
+                        <View style={styles.detailValue}>
+                            <MaterialCommunityIcons
+                                name='fire'
+                                size={30}
+                                color='black'
                             />
+                            <NutriText style={styles.detailValue}>
+                                {product.calories.toString()}
+                            </NutriText>
                         </View>
-                        <NutriText style={styles.productName}>
-                            {fetchProduct.data.name}
-                        </NutriText>
-                        <View style={styles.valuesContainer}>
-                            <View style={styles.detailValue}>
-                                <MaterialCommunityIcons
-                                    name='fire'
-                                    size={30}
-                                    color='black'
-                                />
-                                <NutriText style={styles.detailValue}>
-                                    {fetchProduct.data.calories.toString()}
-                                </NutriText>
-                            </View>
-                            <View style={styles.detailValue}>
-                                <MaterialCommunityIcons
-                                    name='currency-eur'
-                                    size={30}
-                                    color='black'
-                                />
-                                <NutriText style={styles.detailValue}>
-                                    {fetchProduct.data.price.toString()}
-                                </NutriText>
-                            </View>
-                            <View style={styles.detailValue}>
-                                <MaterialCommunityIcons
-                                    name='map-marker'
-                                    size={30}
-                                    color='black'
-                                />
-                                <NutriText style={styles.detailValue}>
-                                    {calculateDistance}
-                                </NutriText>
-                            </View>
+                        <View style={styles.detailValue}>
+                            <MaterialCommunityIcons
+                                name='currency-eur'
+                                size={30}
+                                color='black'
+                            />
+                            <NutriText style={styles.detailValue}>
+                                {product.price.toString()}
+                            </NutriText>
+                        </View>
+                        <View style={styles.detailValue}>
+                            <MaterialCommunityIcons
+                                name='map-marker'
+                                size={30}
+                                color='black'
+                            />
+                            <NutriText style={styles.detailValue}>
+                                {calculateDistance()}
+                            </NutriText>
                         </View>
                     </View>
-                </ScrollView>
-            </Screen>
-        </>
+                </View>
+            </ScrollView>
+        </Screen>
     );
 };
 
