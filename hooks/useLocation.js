@@ -52,7 +52,13 @@ const useLocation = () => {
         getLocation();
     }, []);
 
-    return { location, loading };
+    useEffect(() => {
+        if (!loading && !location) {
+            getLocation();
+        }
+    }, [loading]);
+
+    return { location };
 };
 
 export default useLocation;
