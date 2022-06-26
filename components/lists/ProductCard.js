@@ -129,14 +129,14 @@ const styles = StyleSheet.create({
 });
 
 ProductCard.propTypes = {
-    title: propTypes.string,
-    description: propTypes.string,
-    calories: propTypes.number,
-    price: propTypes.number,
-    distance: propTypes.number,
-    storeImage: propTypes.string,
-    store: propTypes.string,
-    productImage: propTypes.string,
+    title: propTypes.string.isRequired,
+    description: propTypes.string.isRequired,
+    calories: propTypes.number.isRequired,
+    price: propTypes.number.isRequired,
+    distance: propTypes.number.isRequired,
+    storeImage: propTypes.string.isRequired,
+    store: propTypes.string.isRequired,
+    productImage: propTypes.string.isRequired,
     onPress: propTypes.func,
 };
 
