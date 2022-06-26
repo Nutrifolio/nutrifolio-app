@@ -9,11 +9,12 @@ import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useState, useEffect, useCallback } from 'react';
 import useLocation from './hooks/useLocation';
+import ActivityIndicator from './components/ActivityIndicator';
 
 export default function App() {
     const [accessToken, setAccessToken] = useState(null);
     const [products, setProducts] = useState({ favorites: [], recents: [] });
-    const { location } = useLocation(null);
+    const { location } = useLocation();
     const [isLoaded, setIsLoaded] = useState(false);
 
     // Ignore Lottie deprecation warnings
@@ -32,6 +33,7 @@ export default function App() {
                 await SplashScreen.preventAutoHideAsync();
                 // Get token from storage
                 await restoreToken();
+                // TODO Add waiting for location
             } catch (e) {
                 console.warn(e);
             } finally {
@@ -65,7 +67,15 @@ export default function App() {
                     theme={navigationTheme}
                     onReady={onLayoutRootView}
                 >
-                    {accessToken ? <AppNavigator /> : <AuthNavigator />}
+                    {accessToken ? (
+                        location ? (
+                            <AppNavigator />
+                        ) : (
+                            <ActivityIndicator />
+                        )
+                    ) : (
+                        <AuthNavigator />
+                    )}
                 </NavigationContainer>
             </UserContext.Provider>
         </AuthContext.Provider>
