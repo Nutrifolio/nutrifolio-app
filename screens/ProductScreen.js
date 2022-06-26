@@ -13,6 +13,8 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ActivityIndicator from '../components/ActivityIndicator';
 import UserContext from '../auth/userContext';
 import PrimaryButton from '../components/buttons/PrimaryButton';
+import routes from '../navigation/routes';
+import NutriButtonIcon from '../components/buttons/NutriButtonIcon';
 
 const descriptionTitle = 'Description';
 const detailSectionTitle = 'Nutritional Value';
@@ -155,14 +157,28 @@ const ProductScreen = (props) => {
                     })}
                 </View>
                 <View style={styles.storeContainer}>
-                    <View style={styles.storeInfo}>
-                        <Image
-                            source={{ uri: product.store.logo_url }}
-                            style={styles.storeImage}
-                        />
-                        <NutriText style={styles.storeName}>
-                            {product.store.name}
-                        </NutriText>
+                    <View>
+                        <View style={styles.storeInfo}>
+                            <View style={styles.logoTitle}>
+                                <Image
+                                    source={{ uri: product.store.logo_url }}
+                                    style={styles.storeImage}
+                                />
+                                <NutriText style={styles.storeName}>
+                                    {product.store.name}
+                                </NutriText>
+                            </View>
+                            <NutriButtonIcon // TODO fix center
+                                text=''
+                                icon='chevron-right'
+                                onPress={() =>
+                                    props.navigation.navigate(routes.STORE, {
+                                        id: product.store.id,
+                                    })
+                                }
+                                style={styles.chevronStyle}
+                            />
+                        </View>
                     </View>
                     <View>
                         <NutriText style={styles.locationTitle}>
@@ -197,6 +213,7 @@ ProductScreen.propTypes = {
     location: propTypes.objectOf(propTypes.number),
     route: propTypes.object,
     params: propTypes.object,
+    navigation: propTypes.object,
 };
 
 const styles = StyleSheet.create({
@@ -286,8 +303,9 @@ const styles = StyleSheet.create({
     },
     storeInfo: {
         flexDirection: 'row',
-        alignItems: 'center',
         paddingBottom: 20,
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
     },
     storeImage: {
         borderRadius: 100,
@@ -300,6 +318,10 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         paddingLeft: 10,
     },
+    logoTitle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
     locationTitle: {
         fontSize: 15,
         paddingBottom: 5,
@@ -308,6 +330,10 @@ const styles = StyleSheet.create({
         width: '100%',
         height: 300,
         marginVertical: 10,
+    },
+    chevronStyle: {
+        fontSize: 30,
+        color: colors.black,
     },
 });
 
