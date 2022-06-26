@@ -1,6 +1,8 @@
+import ActivityIndicator from '../components/ActivityIndicator';
 import colors from '../styles/colors';
+import haversine from 'haversine-distance';
 import NutriText from '../components/NutriText';
-import ProductCard from '../components/ProductCard';
+import ProductCard from '../components/lists/ProductCard';
 import propTypes from 'prop-types';
 import routes from '../navigation/routes';
 import Screen from '../components/Screen';
@@ -8,7 +10,7 @@ import SmallButton from '../components/buttons/SmallButton';
 import useApi from '../hooks/useApi';
 import useAuth from '../hooks/useAuth';
 import UserContext from '../auth/userContext';
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { getFavorites, getRecents } from '../api/productApi';
 import { StyleSheet, View, ScrollView } from 'react-native';
 
@@ -16,97 +18,170 @@ const welcomeMessage = 'Welcome back,';
 const username = 'John';
 const titleList1 = 'FAVORITES';
 const titleList2 = 'RECENTS';
-const smallButtonText = 'View All';
+const initialLimit = 2;
+const noFavorites = 'No favorites yet';
+const noRecents = 'No recents yet';
 
-const HomeScreen = ({ navigation }) => {
-    const { products, setProducts } = useContext(UserContext);
+const HomeScreen = (props) => {
+    const { location, products, setProducts } = useContext(UserContext);
+    const [recentsCount, setRecentsCount] = useState(initialLimit);
+    const [favoritesCount, setFavoritesCount] = useState(initialLimit);
+    const [recentsAll, setRecentsAll] = useState('View all');
+    const [favoritesAll, setFavoritesAll] = useState('View all');
     const { accessToken } = useAuth();
     const recentsApi = useApi(getRecents);
     const favoritesApi = useApi(getFavorites);
 
     useEffect(() => {
-        if (!products) {
-            recentsApi
-                .request(accessToken)
-                .then((results) => setProducts({ ...products, ...results }));
-            favoritesApi
-                .request(accessToken)
-                .then((results) => setProducts({ ...products, ...results }));
+        recentsApi.request(accessToken);
+        favoritesApi.request(accessToken);
+    }, []);
+
+    useEffect(() => {
+        if (recentsApi.data) {
+            setProducts({ ...products, recents: recentsApi.data.recents });
         }
-    }, [products]);
+    }, [recentsApi.data, recentsApi.loading]);
+
+    useEffect(() => {
+        if (favoritesApi.data && favoritesApi.data.favorites) {
+            setProducts({
+                ...products,
+                favorites: favoritesApi.data.favorites,
+            });
+        }
+    }, [favoritesApi.data, favoritesApi.loading]);
+
+    const calculateDistance = ({ lat, lng }) => {
+        const productLocation = {
+            latitude: lat,
+            longitude: lng,
+        };
+        return haversine(productLocation, location) / 1000;
+    };
+
+    const handleAllFavorites = () => {
+        if (favoritesAll === 'View all') {
+            setFavoritesAll('Hide');
+            if (products && products.favorites && products.favorites.length)
+                setFavoritesCount(products.favorites.length);
+        } else {
+            setFavoritesAll('View all');
+            setFavoritesCount(2);
+        }
+    };
+
+    const handleAllRecents = () => {
+        if (recentsAll === 'View all') {
+            setRecentsAll('Hide');
+            if (products && products.recents && products.recents.length)
+                setRecentsCount(products.recents.length);
+        } else {
+            setRecentsAll('View all');
+            setRecentsCount(2);
+        }
+    };
 
     return (
-        <Screen>
-            <ScrollView
-                style={styles.container}
-                contentContainerStyle={styles.contentContainer}
-            >
-                <View>
-                    <NutriText style={styles.welcome}>
-                        {welcomeMessage}
-                    </NutriText>
-                    <NutriText style={styles.username}>{username}</NutriText>
-                </View>
+        <>
+            <ActivityIndicator
+                visible={recentsApi.loading || favoritesApi.loading}
+            />
+            <Screen>
+                <ScrollView
+                    style={styles.container}
+                    contentContainerStyle={styles.contentContainer}
+                >
+                    <View>
+                        <NutriText style={styles.welcome}>
+                            {welcomeMessage}
+                        </NutriText>
+                        <NutriText style={styles.username}>
+                            {username}
+                        </NutriText>
+                    </View>
 
-                <View style={styles.listHeader}>
-                    <NutriText style={styles.listTitle}>{titleList1}</NutriText>
-                    <SmallButton
-                        text={smallButtonText}
-                        onPress={() => console.log('pressed')}
-                    />
-                </View>
-
-                {products &&
-                    'favorites' in products &&
-                    products.favorites.slice(0, 2).map((item) => (
-                        <ProductCard
-                            key={item.id}
-                            title={item.title}
-                            calories={item.calories}
-                            description={item.description}
-                            distance={item.distance}
-                            price={item.price}
-                            productImage={item.productImage}
-                            store={item.store}
-                            storeImage={item.storeImage}
-                            onPress={() =>
-                                navigation.navigate(routes.PRODUCT, {
-                                    id: item.id,
-                                })
-                            }
+                    <View style={styles.listHeader}>
+                        <NutriText style={styles.listTitle}>
+                            {titleList1}
+                        </NutriText>
+                        <SmallButton
+                            text={favoritesAll}
+                            onPress={handleAllFavorites}
                         />
-                    ))}
+                    </View>
 
-                <View style={styles.listHeader}>
-                    <NutriText style={styles.listTitle}>{titleList2}</NutriText>
-                    <SmallButton
-                        text={smallButtonText}
-                        onPress={() => console.log('pressed')}
-                    />
-                </View>
+                    {products &&
+                    products.favorites &&
+                    products.favorites.length ? (
+                        products.favorites
+                            .slice(0, favoritesCount)
+                            .map((item) => (
+                                <ProductCard
+                                    title={item.name}
+                                    key={'fav_'.concat(item.id)}
+                                    calories={item.calories}
+                                    description={item.description}
+                                    distance={calculateDistance({
+                                        lat: item.store.lat,
+                                        lng: item.store.lng,
+                                    })}
+                                    price={item.price}
+                                    productImage={item.image_url}
+                                    store={item.store.name}
+                                    storeImage={item.store.logo_url}
+                                    onPress={() =>
+                                        props.navigation.navigate(
+                                            routes.PRODUCT,
+                                            {
+                                                id: item.id,
+                                            },
+                                        )
+                                    }
+                                />
+                            ))
+                    ) : (
+                        <NutriText>{noFavorites}</NutriText>
+                    )}
 
-                {products &&
-                    'recents' in products &&
-                    products.recents.slice(0, 2).map((item) => (
-                        <ProductCard
-                            key={item.id}
-                            title={item.title}
-                            calories={item.calories}
-                            description={item.description}
-                            distance={item.distance}
-                            price={item.price}
-                            productImage={item.productImage}
-                            store={item.store}
-                            storeImage={item.storeImage}
-                            onPress={() =>
-                                navigation.navigate(routes.PRODUCT, {
-                                    id: item.id,
-                                })
-                            }
+                    <View style={styles.listHeader}>
+                        <NutriText style={styles.listTitle}>
+                            {titleList2}
+                        </NutriText>
+                        <SmallButton
+                            text={recentsAll}
+                            onPress={handleAllRecents}
                         />
-                    ))}
-            </ScrollView>
-        </Screen>
+                    </View>
+
+                    {products && products.recents && products.recents.length ? (
+                        products.recents.slice(0, recentsCount).map((item) => (
+                            <ProductCard
+                                title={item.name}
+                                key={'rec_'.concat(item.id)}
+                                calories={item.calories}
+                                description={item.description}
+                                distance={calculateDistance({
+                                    lat: item.store.lat,
+                                    lng: item.store.lng,
+                                })}
+                                price={item.price}
+                                productImage={item.image_url}
+                                store={item.store.name}
+                                storeImage={item.store.logo_url}
+                                onPress={() =>
+                                    props.navigation.navigate(routes.PRODUCT, {
+                                        id: item.id,
+                                    })
+                                }
+                            />
+                        ))
+                    ) : (
+                        <NutriText>{noRecents}</NutriText>
+                    )}
+                </ScrollView>
+            </Screen>
+        </>
     );
 };
 
