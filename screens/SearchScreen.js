@@ -68,7 +68,6 @@ const SearchScreen = ({ navigation }) => {
     useEffect(() => {
         if (storesApi.data && storesApi.data.stores && !storesApi.loading) {
             setData(storesApi.data.stores);
-            console.log(storesApi.data.stores);
             setRender('stores');
         }
         return () => {
