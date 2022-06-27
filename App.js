@@ -68,10 +68,13 @@ export default function App() {
                     onReady={onLayoutRootView}
                 >
                     {accessToken ? (
-                        location ? (
+                        location ? ( // Temporary solution for getting location
                             <AppNavigator />
                         ) : (
-                            <ActivityIndicator />
+                            <ActivityIndicator
+                                visible={true}
+                                text={'Loading Location'}
+                            />
                         )
                     ) : (
                         <AuthNavigator />
