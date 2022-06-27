@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "nutrifolio",
+    "name": "Nutrifolio",
     "slug": "nutrifolio",
-    "version": "1.1.0",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -30,7 +30,7 @@
         "ACCESS_FINE_LOCATION"
       ],
       "package": "eu.nutrifolio.userapp",
-      "versionCode": 2,
+      "versionCode": 1,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyD881NNmEdJxap01qjiQxeSp_X2daqJmmI"
