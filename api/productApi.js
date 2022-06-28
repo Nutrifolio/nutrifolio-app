@@ -17,6 +17,7 @@ const createFavorite = async (body, accessToken) =>
         },
     });
 
+// TODO Add getting response from delete api
 const deleteFavorite = async (product_id, accessToken) =>
     fetch(`${endpoints.FAVORITES}/${product_id}`, {
         method: 'DELETE',
