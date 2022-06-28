@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingVertical: 10,
+        paddingVertical: 20,
     },
     detailsContainer: {
         height: '100%',
