@@ -1,20 +1,26 @@
+import ActivityIndicator from '../components/ActivityIndicator';
+import AuthContext from '../auth/authContext';
+import colors from '../styles/colors';
+import FillableIconButton from '../components/buttons/FillableIconButton';
+import haversine from 'haversine-distance';
+import NutriButtonIcon from '../components/buttons/NutriButtonIcon';
+import NutriText from '../components/NutriText';
+import PrimaryButton from '../components/buttons/PrimaryButton';
+import propTypes from 'prop-types';
+import routes from '../navigation/routes';
+import Screen from '../components/Screen';
+import useApi from '../hooks/useApi';
+import UserContext from '../auth/userContext';
 import MapView, { Marker } from 'react-native-maps';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, View, Image, ScrollView } from 'react-native';
-import FillableIconButton from '../components/buttons/FillableIconButton';
-import Screen from '../components/Screen';
-import colors from '../styles/colors';
-import useApi from '../hooks/useApi';
-import { getProduct } from '../api/productApi';
-import propTypes from 'prop-types';
-import NutriText from '../components/NutriText';
-import haversine from 'haversine-distance';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import ActivityIndicator from '../components/ActivityIndicator';
-import UserContext from '../auth/userContext';
-import PrimaryButton from '../components/buttons/PrimaryButton';
-import routes from '../navigation/routes';
-import NutriButtonIcon from '../components/buttons/NutriButtonIcon';
+import {
+    getProduct,
+    createRecent,
+    createFavorite,
+    deleteFavorite,
+} from '../api/productApi';
 
 const descriptionTitle = 'Description';
 const detailSectionTitle = 'Nutritional Value';
@@ -23,23 +29,47 @@ const locTitle = 'Location';
 
 const ProductScreen = (props) => {
     const { id } = props.route.params;
-    const { location } = useContext(UserContext);
-    const [product, setProduct] = useState(null);
-    const fetchProduct = useApi(getProduct);
+    const { accessToken } = useContext(AuthContext);
+    const {
+        location,
+        products: contextProducts,
+        setProducts: setContextProducts,
+    } = useContext(UserContext);
+    const [isFavorite, setIsFavorite] = useState(false);
+    const { data: product, request: fetchProduct } = useApi(getProduct);
+    const createFavoriteApi = useApi(createFavorite);
+    const deleteFavoriteApi = useApi(deleteFavorite);
+    const recentApi = useApi(createRecent);
 
+    // Start
     useEffect(() => {
-        fetchProduct.request(id);
-    }, []);
+        fetchProduct(id);
+    }, [id, fetchProduct]);
 
+    // Product info is fetched
     useEffect(() => {
-        setProduct(fetchProduct.data);
-        return () => setProduct(null);
-    }, [fetchProduct.data]);
+        if (product) {
+            // Check if product is favorite
+            if (contextProducts && contextProducts.favorites) {
+                if (
+                    contextProducts.favorites.find(
+                        (favProduct) => favProduct.id === product.id,
+                    )
+                ) {
+                    setIsFavorite(true);
+                } else setIsFavorite(false);
+            }
+        }
+        // Cleanup
+        return () => {
+            setIsFavorite(false);
+        };
+    }, [product]);
 
     const printDistance = () => {
         const productLocation = {
-            latitude: fetchProduct.data.store.lat,
-            longitude: fetchProduct.data.store.lng,
+            latitude: product.store.lat,
+            longitude: product.store.lng,
         };
         let loc = haversine(location, productLocation);
         if (loc >= 1000) {
@@ -58,8 +88,30 @@ const ProductScreen = (props) => {
         }
     };
 
-    if (!product) {
-        return <ActivityIndicator />;
+    const handlePressFavorite = () => {
+        if (!isFavorite) {
+            // Like
+            setIsFavorite(true);
+            createFavoriteApi.request({ product_id: product.id }, accessToken);
+            setContextProducts({
+                recents: contextProducts.recents,
+                favorites: [...contextProducts.favorites, product],
+            });
+        } else {
+            // Unlike
+            setIsFavorite(false);
+            deleteFavoriteApi.request(product.id, accessToken);
+            setContextProducts({
+                recents: contextProducts.recents,
+                favorites: contextProducts.favorites.filter(
+                    (favProduct) => favProduct.id !== product.id,
+                ),
+            });
+        }
+    };
+
+    if (!product || createFavoriteApi.loading || recentApi.loading) {
+        return <ActivityIndicator visible={true} />;
     }
     return (
         <Screen>
@@ -69,7 +121,8 @@ const ProductScreen = (props) => {
                         icon='heart-outline'
                         iconFilled='heart'
                         text=''
-                        onPress={() => {}}
+                        pressed={isFavorite}
+                        onPress={handlePressFavorite}
                     />
                 </View>
 
@@ -118,7 +171,10 @@ const ProductScreen = (props) => {
                         </View>
                     </View>
                     <View style={styles.buttonContainer}>
-                        <PrimaryButton onPress={() => {}} text={'Reserve'} />
+                        <PrimaryButton
+                            onPress={() => {}}
+                            text={'Add to Recents'}
+                        />
                     </View>
                 </View>
                 <View style={styles.section}>
@@ -177,6 +233,7 @@ const ProductScreen = (props) => {
                                     })
                                 }
                                 style={styles.chevronStyle}
+                                containerStyle={styles.chevronContainer}
                             />
                         </View>
                     </View>
@@ -334,6 +391,9 @@ const styles = StyleSheet.create({
     chevronStyle: {
         fontSize: 30,
         color: colors.black,
+    },
+    chevronContainer: {
+        paddingLeft: 20,
     },
 });
 
