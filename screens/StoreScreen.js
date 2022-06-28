@@ -1,35 +1,54 @@
-import MapView, { Marker } from 'react-native-maps';
-import React, { useContext, useState, useEffect } from 'react';
-import { StyleSheet, View, Image, ScrollView } from 'react-native';
-import Screen from '../components/Screen';
-import colors from '../styles/colors';
-import useApi from '../hooks/useApi';
-import { getStore } from '../api/storeApi';
-import NutriText from '../components/NutriText';
 import ActivityIndicator from '../components/ActivityIndicator';
-import UserContext from '../auth/userContext';
+import colors from '../styles/colors';
+import NutriText from '../components/NutriText';
 import propTypes from 'prop-types';
+import routes from '../navigation/routes';
+import useApi from '../hooks/useApi';
+import Screen from '../components/Screen';
+import SimpleProductCard from '../components/lists/SimpleProductCard';
+import MapView, { Marker } from 'react-native-maps';
+import React, { useEffect } from 'react';
+import { getStore } from '../api/storeApi';
+import { StyleSheet, View, Image, ScrollView } from 'react-native';
 
 const locTitle = 'Location';
 
 const StoreScreen = (props) => {
     const { id } = props.route.params;
-    const { location } = useContext(UserContext);
-    const [store, setStore] = useState(null);
-    const fetchStore = useApi(getStore);
+    const { data: store, request: fetchStore } = useApi(getStore);
 
     useEffect(() => {
-        fetchStore.request(id);
-    }, []);
-
-    useEffect(() => {
-        setStore(fetchStore.data);
-        return () => setStore(null);
-    }, [fetchStore.data]);
+        fetchStore(id);
+    }, [id, fetchStore]);
 
     if (!store) {
-        return <ActivityIndicator />;
+        return <ActivityIndicator visible={true} />;
     }
+
+    const productsList = store.products.map((item) => (
+        <View key={item.category}>
+            <NutriText style={styles.productsListTitle}>
+                {item.category}
+            </NutriText>
+            <View>
+                {item.products.map((product) => (
+                    <SimpleProductCard
+                        title={product.name}
+                        key={'prod_'.concat(product.id)}
+                        calories={product.calories}
+                        description={product.description}
+                        price={product.price}
+                        productImage={product.image_url}
+                        onPress={() =>
+                            props.navigation.navigate(routes.PRODUCT, {
+                                id: product.id,
+                            })
+                        }
+                    />
+                ))}
+            </View>
+        </View>
+    ));
 
     return (
         <Screen>
@@ -51,8 +70,8 @@ const StoreScreen = (props) => {
                         <NutriText>{store.location}</NutriText>
                         <MapView
                             initialRegion={{
-                                latitude: location.latitude,
-                                longitude: location.longitude,
+                                latitude: store.lat,
+                                longitude: store.lng,
                                 latitudeDelta: 0.0922,
                                 longitudeDelta: 0.0421,
                             }}
@@ -60,50 +79,15 @@ const StoreScreen = (props) => {
                         >
                             <Marker
                                 coordinate={{
-                                    latitude: location.latitude,
-                                    longitude: location.longitude,
+                                    latitude: store.lat,
+                                    longitude: store.lng,
                                 }}
                             />
                         </MapView>
                     </View>
                 </View>
-                {/* <View>
-                    <View style={styles.productSection}>
-                        <NutriText style={styles.productsTitle}>
-                            {productsTitle}
-                        </NutriText>
-                    </View>
-                    <SectionList
-                        sections={store.products}
-                        keyExtractor={(item, index) => item + index}
-                        renderItem={({ item }) => (
-                            <ProductCard
-                                title={item.name}
-                                key={'fav_'.concat(item.id)}
-                                calories={item.calories}
-                                description={item.description}
-                                distance={calculateDistance({
-                                    lat: store.lat,
-                                    lng: store.lng,
-                                })}
-                                price={item.price}
-                                productImage={item.image_url}
-                                store={item.store.name}
-                                storeImage={item.store.logo_url}
-                                onPress={() =>
-                                    props.navigation.navigate(routes.PRODUCT, {
-                                        id: item.id,
-                                    })
-                                }
-                            />
-                        )}
-                        renderSectionHeader={({ section: { category } }) => (
-                            <NutriText style={styles.productsTitle}>
-                                {category}
-                            </NutriText>
-                        )}
-                    />
-                </View> */}
+
+                <View style={styles.productSection}>{productsList}</View>
             </ScrollView>
         </Screen>
     );
@@ -113,6 +97,7 @@ StoreScreen.propTypes = {
     id: propTypes.number.isRequired,
     route: propTypes.object,
     params: propTypes.object,
+    navigation: propTypes.object,
 };
 
 const styles = StyleSheet.create({
@@ -155,8 +140,10 @@ const styles = StyleSheet.create({
         borderTopColor: colors.grey,
         padding: 20,
     },
-    productsTitle: {
+    productsListTitle: {
         fontSize: 20,
+        fontWeight: '600',
+        paddingVertical: 30,
     },
 });
 
