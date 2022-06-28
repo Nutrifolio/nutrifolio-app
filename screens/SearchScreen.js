@@ -175,7 +175,6 @@ const SearchScreen = ({ navigation }) => {
                     />
                     <ActivityIndicator
                         visible={
-                            !(data && data.length) ||
                             storesApi.loading ||
                             recentsApi.loading ||
                             favoritesApi.loading ||
