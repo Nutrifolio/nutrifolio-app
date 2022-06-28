@@ -191,7 +191,7 @@ const FilterModal = (props) => {
                     />
                     {headerPressed === 'calories' && (
                         <NutriSlider
-                            max={1000}
+                            max={3000}
                             suffix={'kcal'}
                             onValuesChange={(newValue) => setCalories(newValue)}
                             value={calories}
@@ -205,7 +205,7 @@ const FilterModal = (props) => {
                     />
                     {headerPressed === 'protein' && (
                         <NutriSlider
-                            max={400}
+                            max={1000}
                             suffix={'g'}
                             onValuesChange={(newValue) => setProtein(newValue)}
                             value={protein}
@@ -219,7 +219,7 @@ const FilterModal = (props) => {
                     />
                     {headerPressed === 'carbs' && (
                         <NutriSlider
-                            max={600}
+                            max={1000}
                             suffix={'g'}
                             onValuesChange={(newValue) => setCarbs(newValue)}
                             value={carbs}
@@ -233,7 +233,7 @@ const FilterModal = (props) => {
                     />
                     {headerPressed === 'fats' && (
                         <NutriSlider
-                            max={300}
+                            max={1000}
                             suffix={'g'}
                             onValuesChange={(newValue) => setFats(newValue)}
                             value={fats}
