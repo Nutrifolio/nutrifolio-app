@@ -1,22 +1,43 @@
-import { StyleSheet, View } from 'react-native';
-import MultiSlider from '@ptomasroos/react-native-multi-slider';
-import React from 'react';
 import colors from '../../styles/colors';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import NutriText from '../NutriText';
 import propTypes from 'prop-types';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
 
 const NutriSlider = (props) => {
+    const customLabels = ({ oneMarkerValue, twoMarkerValue }, measureUnits) => (
+        <View style={styles.labelWrapper}>
+            <NutriText>
+                {oneMarkerValue.toString().concat(measureUnits)}
+            </NutriText>
+
+            {twoMarkerValue ? (
+                <NutriText>
+                    {twoMarkerValue.toString().concat(measureUnits)}
+                </NutriText>
+            ) : null}
+        </View>
+    );
+
     return (
         <View style={styles.container}>
             <MultiSlider
                 trackStyle={styles.trackStyle}
-                markerContainerStyle={styles.markerContainerStyle}
+                selectedStyle={styles.selectedStyle}
+                markerStyle={styles.markerStyle}
+                pressedMarkerStyle={styles.pressedMarkerStyle}
                 enableLabel={true}
+                customLabel={(labelProps) =>
+                    customLabels(labelProps, props.suffix)
+                }
                 min={0}
                 max={props.max}
                 valueSuffix={props.suffix}
                 onValuesChange={props.onValuesChange}
                 values={props.value}
                 allowOverlap={false}
+                minMarkerOverlapDistance={10}
             />
         </View>
     );
@@ -39,9 +60,27 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     trackStyle: {
-        color: colors.primary,
+        backgroundColor: colors.lightGrey,
     },
-    markerContainerStyle: {
-        color: colors.primary,
+    selectedStyle: {
+        backgroundColor: colors.primary,
+    },
+    markerStyle: {
+        borderWidth: 1,
+        borderColor: colors.grey,
+        backgroundColor: colors.white,
+        height: 20,
+        width: 20,
+    },
+    pressedMarkerStyle: {
+        borderWidth: 1,
+        borderColor: colors.grey,
+        backgroundColor: colors.primary,
+        height: 25,
+        width: 25,
+    },
+    labelWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
 });
