@@ -2,23 +2,23 @@ import * as Location from 'expo-location';
 import { useState, useEffect } from 'react';
 import { Alert, BackHandler } from 'react-native';
 
+// TODO Improve User Interaction and prompt enabling location tracking
+
 const useLocation = () => {
     const [location, setLocation] = useState(null);
-    const [loading, setLoading] = useState(false);
 
     const getLocation = async () => {
         try {
-            setLoading(true);
-            // Ask location permissions
+            // Ask for location permissions
             let { granted } =
                 await Location.requestForegroundPermissionsAsync();
             if (!granted) {
                 Alert.alert(
                     'Location Access Required',
-                    'Location permission is necessary for nearby search.',
+                    'Location tracking permission is necessary for nearby search.',
                     [
                         {
-                            text: 'OK',
+                            text: 'Exit',
                             onPress: () => BackHandler.exitApp(),
                         },
                     ],
@@ -28,20 +28,17 @@ const useLocation = () => {
             // Get user location
             const {
                 coords: { latitude, longitude },
-            } = await Location.getCurrentPositionAsync({});
-            setLoading(false);
+            } = await Location.getCurrentPositionAsync();
             setLocation({ latitude, longitude });
         } catch (e) {
             console.warn(e);
             Alert.alert(
                 'Location Access Required',
-                'Location permission is necessary for nearby search.',
+                'Location tracking is necessary for nearby search.',
                 [
                     {
-                        text: 'Enable Location Tracking',
-                        onPress: () => {
-                            Location.enableNetworkProviderAsync();
-                        },
+                        text: 'Exit',
+                        onPress: () => BackHandler.exitApp(),
                     },
                 ],
             );
@@ -51,12 +48,6 @@ const useLocation = () => {
     useEffect(() => {
         getLocation();
     }, []);
-
-    useEffect(() => {
-        if (!loading && !location) {
-            getLocation();
-        }
-    }, [loading]);
 
     return { location };
 };
