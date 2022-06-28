@@ -127,14 +127,6 @@ const SearchScreen = ({ navigation }) => {
     // To anyone who reads this mess, I apologize
     return (
         <>
-            <ActivityIndicator
-                visible={
-                    storesApi.loading ||
-                    recentsApi.loading ||
-                    favoritesApi.loading ||
-                    filterApi.loading
-                }
-            />
             <Screen>
                 <View
                     style={{
@@ -180,6 +172,15 @@ const SearchScreen = ({ navigation }) => {
                         toggleModal={() => handleToggleFilter()}
                         visible={modalVisible}
                         onSubmit={handleSubmitFilter}
+                    />
+                    <ActivityIndicator
+                        visible={
+                            !(data && data.length) ||
+                            storesApi.loading ||
+                            recentsApi.loading ||
+                            favoritesApi.loading ||
+                            filterApi.loading
+                        }
                     />
                     {!(data && data.length > 0) && (
                         <Image
