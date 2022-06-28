@@ -3,6 +3,7 @@ import AuthContext from '../auth/authContext';
 import colors from '../styles/colors';
 import FillableIconButton from '../components/buttons/FillableIconButton';
 import haversine from 'haversine-distance';
+import LottieView from 'lottie-react-native';
 import NutriButtonIcon from '../components/buttons/NutriButtonIcon';
 import NutriText from '../components/NutriText';
 import PrimaryButton from '../components/buttons/PrimaryButton';
@@ -36,6 +37,7 @@ const ProductScreen = (props) => {
         setProducts: setContextProducts,
     } = useContext(UserContext);
     const [isFavorite, setIsFavorite] = useState(false);
+    const [showDone, setShowDone] = useState(false);
     const { data: product, request: fetchProduct } = useApi(getProduct);
     const createFavoriteApi = useApi(createFavorite);
     const deleteFavoriteApi = useApi(deleteFavorite);
@@ -64,7 +66,7 @@ const ProductScreen = (props) => {
         return () => {
             setIsFavorite(false);
         };
-    }, [product]);
+    }, [product, contextProducts]);
 
     const printDistance = () => {
         const productLocation = {
@@ -107,6 +109,21 @@ const ProductScreen = (props) => {
                     (favProduct) => favProduct.id !== product.id,
                 ),
             });
+        }
+    };
+
+    const handlePressRecent = () => {
+        if (
+            !contextProducts.recents.find(
+                (recentProd) => recentProd.id === product.id,
+            )
+        ) {
+            recentApi.request({ product_id: product.id }, accessToken);
+            setContextProducts({
+                recents: [...contextProducts.recents, product],
+                favorites: contextProducts.favorites,
+            });
+            setShowDone(true);
         }
     };
 
@@ -171,10 +188,21 @@ const ProductScreen = (props) => {
                         </View>
                     </View>
                     <View style={styles.buttonContainer}>
-                        <PrimaryButton
-                            onPress={() => {}}
-                            text={'Add to Recents'}
-                        />
+                        {showDone ? (
+                            <LottieView
+                                autoPlay
+                                loop={false}
+                                onAnimationFinish={() => setShowDone(false)}
+                                source={require('../assets/animations/done.json')}
+                                style={styles.animation}
+                                speed={2}
+                            />
+                        ) : (
+                            <PrimaryButton
+                                onPress={handlePressRecent}
+                                text={'Add to Recents'}
+                            />
+                        )}
                     </View>
                 </View>
                 <View style={styles.section}>
@@ -274,10 +302,6 @@ ProductScreen.propTypes = {
 };
 
 const styles = StyleSheet.create({
-    scrollContainer: {
-        flex: 1,
-        paddingVertical: 10,
-    },
     container: {
         flexGrow: 1,
         backgroundColor: '#fff',
@@ -334,6 +358,11 @@ const styles = StyleSheet.create({
     },
     buttonContainer: {
         width: '80%',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    animation: {
+        width: 60,
     },
     section: {
         width: '100%',
