@@ -295,7 +295,6 @@ const ProductScreen = (props) => {
 
 ProductScreen.propTypes = {
     id: propTypes.number,
-    location: propTypes.objectOf(propTypes.number),
     route: propTypes.object,
     params: propTypes.object,
     navigation: propTypes.object,
