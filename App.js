@@ -33,7 +33,7 @@ export default function App() {
                 await SplashScreen.preventAutoHideAsync();
                 // Get token from storage
                 await restoreToken();
-                // TODO Add waiting for location
+                // TODO Add waiting for location to load
             } catch (e) {
                 console.warn(e);
             } finally {
@@ -73,7 +73,7 @@ export default function App() {
                         ) : (
                             <ActivityIndicator
                                 visible={true}
-                                text={'Loading Location'}
+                                text={'Loading Location...'}
                             />
                         )
                     ) : (
