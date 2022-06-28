@@ -83,10 +83,11 @@ const HomeScreen = (props) => {
 
     return (
         <>
-            <ActivityIndicator
-                visible={recentsApi.loading || favoritesApi.loading}
-            />
             <Screen>
+                <ActivityIndicator
+                    visible={recentsApi.loading || favoritesApi.loading}
+                    text={'Loading your data...'}
+                />
                 <ScrollView
                     style={styles.container}
                     contentContainerStyle={styles.contentContainer}
