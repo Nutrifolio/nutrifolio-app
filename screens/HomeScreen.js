@@ -11,6 +11,7 @@ import useApi from '../hooks/useApi';
 import useAuth from '../hooks/useAuth';
 import UserContext from '../auth/userContext';
 import React, { useEffect, useContext, useState } from 'react';
+import { getUser } from '../api/accountApi';
 import { getFavorites, getRecents } from '../api/productApi';
 import { StyleSheet, View, ScrollView } from 'react-native';
 
@@ -22,7 +23,8 @@ const noFavorites = 'No favorites yet';
 const noRecents = 'No recents yet';
 
 const HomeScreen = (props) => {
-    const { location, products, setProducts } = useContext(UserContext);
+    const { location, products, setProducts, userInfo, setUserInfo } =
+        useContext(UserContext);
     const [recentsCount, setRecentsCount] = useState(initialLimit);
     const [favoritesCount, setFavoritesCount] = useState(initialLimit);
     const [recentsAll, setRecentsAll] = useState('View all');
@@ -30,10 +32,12 @@ const HomeScreen = (props) => {
     const { accessToken } = useAuth();
     const recentsApi = useApi(getRecents);
     const favoritesApi = useApi(getFavorites);
+    const userInfoApi = useApi(getUser);
 
     useEffect(() => {
         recentsApi.request(accessToken);
         favoritesApi.request(accessToken);
+        userInfoApi.request(accessToken);
     }, []);
 
     useEffect(() => {
@@ -50,6 +54,12 @@ const HomeScreen = (props) => {
             });
         }
     }, [favoritesApi.data, favoritesApi.loading]);
+
+    useEffect(() => {
+        if (userInfoApi.data) {
+            setUserInfo(userInfoApi.data);
+        }
+    }, [userInfoApi.data, userInfoApi.loading]);
 
     const calculateDistance = ({ lat, lng }) => {
         const productLocation = {
@@ -95,6 +105,9 @@ const HomeScreen = (props) => {
                     <View>
                         <NutriText style={styles.welcome}>
                             {welcomeMessage}
+                        </NutriText>
+                        <NutriText style={styles.username}>
+                            {userInfo.first_name}
                         </NutriText>
                     </View>
 

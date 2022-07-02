@@ -18,6 +18,7 @@ LogBox.ignoreLogs([/ViewPropTypes/]);
 export default function App() {
     const { location } = useLocation();
     const netInfo = useNetInfo();
+    const [userInfo, setUserInfo] = useState(null);
     const [accessToken, setAccessToken] = useState(null);
     const [products, setProducts] = useState({ favorites: [], recents: [] });
     const [isLoaded, setIsLoaded] = useState(false);
@@ -68,7 +69,15 @@ export default function App() {
 
     return (
         <AuthContext.Provider value={{ accessToken, setAccessToken }}>
-            <UserContext.Provider value={{ location, products, setProducts }}>
+            <UserContext.Provider
+                value={{
+                    location,
+                    userInfo,
+                    products,
+                    setProducts,
+                    setUserInfo,
+                }}
+            >
                 <NavigationContainer
                     theme={navigationTheme}
                     onReady={onLayoutRootView}
