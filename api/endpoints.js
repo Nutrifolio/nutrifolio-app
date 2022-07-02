@@ -3,7 +3,7 @@ const baseURL = 'https://nutrifolio-api.herokuapp.com';
 export default Object.freeze({
     REGISTER: `${baseURL}/signup`,
     LOGIN: `${baseURL}/login`,
-    USERS: `${baseURL}/users`,
+    USER: `${baseURL}/user_info`,
     STORES: `${baseURL}/stores`,
     SEARCH: `${baseURL}/search`,
     PRODUCTS: `${baseURL}/products`,

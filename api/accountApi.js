@@ -25,8 +25,8 @@ const login = async (body) => {
     });
 };
 
-const getUser = async (userId, accessToken) =>
-    fetch(`${endpoints.USERS}/${userId}`, {
+const getUser = async (accessToken) =>
+    fetch(endpoints.USER, {
         headers: {
             Authorization: `Bearer ${accessToken}`,
         },
