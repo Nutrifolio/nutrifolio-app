@@ -17,11 +17,22 @@ const checkboxes = {
     Pescatarian: false,
 };
 
+const initFilters = {
+    categories: false,
+    distance: false,
+    price: false,
+    calories: false,
+    protein: false,
+    carbs: false,
+    fats: false,
+    sort: false,
+};
+
 const sortBy = ['Price', 'Distance', 'Calories', 'Protein'];
 
 // To anyone who reads this ... I'm sorry
 const FilterModal = (props) => {
-    const [headerPressed, setHeaderPressed] = useState('none');
+    const [filters, setFilters] = useState(initFilters);
     const [categories, setCategories] = useState(checkboxes);
     const [distance, setDistance] = useState([50]);
     const [price, setPrice] = useState([0, 5]);
@@ -31,21 +42,13 @@ const FilterModal = (props) => {
     const [fats, setFats] = useState([0, 100]);
     const [sort, setSort] = useState('');
 
-    const setFilter = (filterName) => {
-        if (headerPressed === filterName) {
-            setHeaderPressed('none');
-        } else {
-            setHeaderPressed(filterName);
-        }
-    };
-
     const handleCategoryPress = (name) => {
         let categoriesCopy = { ...categories };
         categoriesCopy[name] = !categories[name];
         setCategories(categoriesCopy);
     };
 
-    const pressedSort = (sortName) => {
+    const handleSortPress = (sortName) => {
         if (sort === sortName) {
             setSort('');
         } else {
@@ -57,13 +60,14 @@ const FilterModal = (props) => {
         let checkboxesCopy = { ...checkboxes };
         Object.keys(checkboxes).forEach((box) => (checkboxesCopy[box] = false));
 
-        setHeaderPressed('none');
+        setFilters(initFilters);
         setCategories(checkboxesCopy);
-        setDistance([0]);
+        setDistance([50]);
         setPrice([0, 5]);
-        setCalories([0, 100]);
+        setCalories([0, 300]);
         setProtein([0, 100]);
         setCarbs([0, 100]);
+        setFats([0, 100]);
         setSort('');
     };
 
@@ -137,11 +141,16 @@ const FilterModal = (props) => {
                     </View>
                     <FilterHeader
                         icon='plus'
-                        headerPressed={headerPressed === 'categories'}
+                        headerPressed={filters.categories}
                         text='Categories'
-                        onPress={() => setFilter('categories')}
+                        onPress={() =>
+                            setFilters({
+                                ...filters,
+                                categories: !filters.categories,
+                            })
+                        }
                     />
-                    {headerPressed === 'categories' && (
+                    {filters.categories && (
                         <View>
                             {Object.keys(checkboxes).map((title) => (
                                 <FillableIconButton
@@ -157,11 +166,16 @@ const FilterModal = (props) => {
                     )}
                     <FilterHeader
                         icon='plus'
-                        headerPressed={headerPressed === 'distance'}
+                        headerPressed={filters.distance}
                         text='Distance'
-                        onPress={() => setFilter('distance')}
+                        onPress={() =>
+                            setFilters({
+                                ...filters,
+                                distance: !filters.distance,
+                            })
+                        }
                     />
-                    {headerPressed === 'distance' && (
+                    {filters.distance && (
                         <NutriSlider
                             max={100}
                             suffix={'km'}
@@ -171,11 +185,16 @@ const FilterModal = (props) => {
                     )}
                     <FilterHeader
                         icon='plus'
-                        headerPressed={headerPressed === 'price'}
+                        headerPressed={filters.distance}
                         text='Price'
-                        onPress={() => setFilter('price')}
+                        onPress={() =>
+                            setFilters({
+                                ...filters,
+                                price: !filters.price,
+                            })
+                        }
                     />
-                    {headerPressed === 'price' && (
+                    {filters.price && (
                         <NutriSlider
                             max={50}
                             suffix={'€'}
@@ -185,11 +204,16 @@ const FilterModal = (props) => {
                     )}
                     <FilterHeader
                         icon='plus'
-                        headerPressed={headerPressed === 'calories'}
+                        headerPressed={filters.calories}
                         text='Calories'
-                        onPress={() => setFilter('calories')}
+                        onPress={() =>
+                            setFilters({
+                                ...filters,
+                                calories: !filters.calories,
+                            })
+                        }
                     />
-                    {headerPressed === 'calories' && (
+                    {filters.calories && (
                         <NutriSlider
                             max={3000}
                             suffix={'kcal'}
@@ -199,11 +223,16 @@ const FilterModal = (props) => {
                     )}
                     <FilterHeader
                         icon='plus'
-                        headerPressed={headerPressed === 'protein'}
+                        headerPressed={filters.protein}
                         text='Protein'
-                        onPress={() => setFilter('protein')}
+                        onPress={() =>
+                            setFilters({
+                                ...filters,
+                                protein: !filters.protein,
+                            })
+                        }
                     />
-                    {headerPressed === 'protein' && (
+                    {filters.protein && (
                         <NutriSlider
                             max={1000}
                             suffix={'g'}
@@ -213,11 +242,16 @@ const FilterModal = (props) => {
                     )}
                     <FilterHeader
                         icon='plus'
-                        headerPressed={headerPressed === 'carbs'}
+                        headerPressed={filters.carbs}
                         text='Carbohydrates'
-                        onPress={() => setFilter('carbs')}
+                        onPress={() =>
+                            setFilters({
+                                ...filters,
+                                carbs: !filters.carbs,
+                            })
+                        }
                     />
-                    {headerPressed === 'carbs' && (
+                    {filters.carbs && (
                         <NutriSlider
                             max={1000}
                             suffix={'g'}
@@ -227,11 +261,16 @@ const FilterModal = (props) => {
                     )}
                     <FilterHeader
                         icon='plus'
-                        headerPressed={headerPressed === 'fats'}
+                        headerPressed={filters.fats}
                         text='Fats'
-                        onPress={() => setFilter('fats')}
+                        onPress={() =>
+                            setFilters({
+                                ...filters,
+                                fats: !filters.fats,
+                            })
+                        }
                     />
-                    {headerPressed === 'fats' && (
+                    {filters.fats && (
                         <NutriSlider
                             max={1000}
                             suffix={'g'}
@@ -241,11 +280,16 @@ const FilterModal = (props) => {
                     )}
                     <FilterHeader
                         icon='plus'
-                        headerPressed={headerPressed === 'sort'}
+                        headerPressed={filters.sort}
                         text='Sort By'
-                        onPress={() => setFilter('sort')}
+                        onPress={() =>
+                            setFilters({
+                                ...filters,
+                                sort: !filters.sort,
+                            })
+                        }
                     />
-                    {headerPressed === 'sort' && (
+                    {filters.sort && (
                         <View>
                             {sortBy.map((by) => (
                                 <FillableIconButton
@@ -254,7 +298,7 @@ const FilterModal = (props) => {
                                     icon={'checkbox-blank-circle-outline'}
                                     iconFilled={'checkbox-marked-circle'}
                                     pressed={sort === by}
-                                    onPress={() => pressedSort(by)}
+                                    onPress={() => handleSortPress(by)}
                                 />
                             ))}
                         </View>
