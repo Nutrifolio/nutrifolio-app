@@ -1,24 +1,26 @@
 import * as SplashScreen from 'expo-splash-screen';
+import ActivityIndicator from './components/ActivityIndicator';
 import AppNavigator from './navigation/AppNavigator';
 import AuthContext from './auth/authContext';
-import AuthNavigator from './navigation/AuthNavigator';
 import AuthStorage from './auth/storage';
+import AuthNavigator from './navigation/AuthNavigator';
 import navigationTheme from './styles/navigationTheme';
+import useLocation from './hooks/useLocation';
+import { useNetInfo } from '@react-native-community/netinfo';
 import UserContext from './auth/userContext';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import React, { useState, useEffect, useCallback } from 'react';
-import useLocation from './hooks/useLocation';
-import ActivityIndicator from './components/ActivityIndicator';
+
+// Ignore Lottie deprecation warnings
+LogBox.ignoreLogs([/ViewPropTypes/]);
 
 export default function App() {
+    const { location } = useLocation();
+    const netInfo = useNetInfo();
     const [accessToken, setAccessToken] = useState(null);
     const [products, setProducts] = useState({ favorites: [], recents: [] });
-    const { location } = useLocation();
     const [isLoaded, setIsLoaded] = useState(false);
-
-    // Ignore Lottie deprecation warnings
-    LogBox.ignoreLogs([/ViewPropTypes/]);
 
     const restoreToken = async () => {
         const token = await AuthStorage.getToken();
@@ -29,19 +31,17 @@ export default function App() {
     useEffect(() => {
         async function prepare() {
             try {
-                // Keep the splash screen visible while we fetch resources
+                // Keep the splash screen visible while loading
                 await SplashScreen.preventAutoHideAsync();
                 // Get token from storage
                 await restoreToken();
-                // TODO Add waiting for location to load
             } catch (e) {
                 console.warn(e);
             } finally {
-                // Tell the application to render
+                // Tell app to render
                 setIsLoaded(true);
             }
         }
-
         prepare();
     }, []);
 
@@ -58,6 +58,12 @@ export default function App() {
 
     if (!isLoaded) {
         return null;
+    } else if (!location) {
+        // Wait for location to load
+        return <ActivityIndicator visible={true} text='Loading Location...' />;
+    } else if (netInfo.type === 'unknown' || !netInfo.isInternetReachable) {
+        // Wait for internet connection
+        return <ActivityIndicator visible={true} text='Connecting...' />;
     }
 
     return (
@@ -67,18 +73,7 @@ export default function App() {
                     theme={navigationTheme}
                     onReady={onLayoutRootView}
                 >
-                    {accessToken ? (
-                        location ? ( // Temporary solution for getting location
-                            <AppNavigator />
-                        ) : (
-                            <ActivityIndicator
-                                visible={true}
-                                text={'Loading Location...'}
-                            />
-                        )
-                    ) : (
-                        <AuthNavigator />
-                    )}
+                    {accessToken ? <AppNavigator /> : <AuthNavigator />}
                 </NavigationContainer>
             </UserContext.Provider>
         </AuthContext.Provider>
