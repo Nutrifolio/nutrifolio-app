@@ -6,11 +6,11 @@ import AuthStorage from './auth/storage';
 import AuthNavigator from './navigation/AuthNavigator';
 import navigationTheme from './styles/navigationTheme';
 import useLocation from './hooks/useLocation';
-import { useNetInfo } from '@react-native-community/netinfo';
 import UserContext from './auth/userContext';
+import React, { useState, useEffect } from 'react';
 import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import React, { useState, useEffect, useCallback } from 'react';
+import { useNetInfo } from '@react-native-community/netinfo';
 
 // Ignore Lottie deprecation warnings
 LogBox.ignoreLogs([/ViewPropTypes/]);
@@ -41,21 +41,11 @@ export default function App() {
             } finally {
                 // Tell app to render
                 setIsLoaded(true);
+                await SplashScreen.hideAsync();
             }
         }
         prepare();
     }, []);
-
-    const onLayoutRootView = useCallback(async () => {
-        if (isLoaded) {
-            // This tells the splash screen to hide immediately! If we call this after
-            // `setIsLoaded`, then we may see a blank screen while the app is
-            // loading its initial state and rendering its first pixels. So instead,
-            // we hide the splash screen once we know the root view has already
-            // performed layout.
-            await SplashScreen.hideAsync();
-        }
-    }, [isLoaded]);
 
     if (!isLoaded) {
         return null;
@@ -78,10 +68,7 @@ export default function App() {
                     setUserInfo,
                 }}
             >
-                <NavigationContainer
-                    theme={navigationTheme}
-                    onReady={onLayoutRootView}
-                >
+                <NavigationContainer theme={navigationTheme}>
                     {accessToken ? <AppNavigator /> : <AuthNavigator />}
                 </NavigationContainer>
             </UserContext.Provider>
