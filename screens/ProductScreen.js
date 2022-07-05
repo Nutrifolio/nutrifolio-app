@@ -127,8 +127,8 @@ const ProductScreen = (props) => {
         }
     };
 
-    if (!product || createFavoriteApi.loading || recentApi.loading) {
-        return <ActivityIndicator visible={true} />;
+    if (!product) {
+        return <ActivityIndicator visible={true} text={'Loading...'} />;
     }
     return (
         <Screen>
