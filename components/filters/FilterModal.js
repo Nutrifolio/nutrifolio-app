@@ -28,7 +28,7 @@ const initFilters = {
     sort: false,
 };
 
-const sortBy = ['Price', 'Distance', 'Calories', 'Protein'];
+const sortBy = ['price', 'distance', 'calories', 'protein'];
 
 // To anyone who reads this ... I'm sorry
 const FilterModal = (props) => {
@@ -73,7 +73,7 @@ const FilterModal = (props) => {
 
     const handleDone = () => {
         let ordering;
-        if (sort === 'Protein') {
+        if (sort === 'protein') {
             ordering = 'DESC';
         } else {
             ordering = 'ASC';
@@ -293,7 +293,9 @@ const FilterModal = (props) => {
                         <View>
                             {sortBy.map((by) => (
                                 <FillableIconButton
-                                    text={by}
+                                    text={
+                                        by.charAt(0).toUpperCase() + by.slice(1)
+                                    }
                                     key={by}
                                     icon={'checkbox-blank-circle-outline'}
                                     iconFilled={'checkbox-marked-circle'}
