@@ -95,7 +95,9 @@ const HomeScreen = (props) => {
         <>
             <Screen>
                 <ActivityIndicator
-                    visible={recentsApi.loading || favoritesApi.loading}
+                    visible={
+                        recentsApi.loading || favoritesApi.loading || !userInfo
+                    }
                     text={'Loading your data...'}
                 />
                 <ScrollView
@@ -106,9 +108,11 @@ const HomeScreen = (props) => {
                         <NutriText style={styles.welcome}>
                             {welcomeMessage}
                         </NutriText>
-                        <NutriText style={styles.username}>
-                            {userInfo.first_name}
-                        </NutriText>
+                        {userInfo && (
+                            <NutriText style={styles.username}>
+                                {userInfo.first_name}
+                            </NutriText>
+                        )}
                     </View>
 
                     <View style={styles.listHeader}>
