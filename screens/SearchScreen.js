@@ -3,17 +3,17 @@ import colors from '../styles/colors';
 import FillableIconButton from '../components/buttons/FillableIconButton';
 import FilterModal from '../components/filters/FilterModal';
 import NutriTextInput from '../components/NutriTextInput';
+import ProductList from '../components/lists/ProductList';
 import propTypes from 'prop-types';
 import Screen from '../components/Screen';
+import StoreList from '../components/lists/StoreList';
 import useApi from '../hooks/useApi';
 import useAuth from '../hooks/useAuth';
+import UserContext from '../auth/userContext';
 import React, { useState, useContext, useEffect } from 'react';
 import { searchStore } from '../api/storeApi';
 import { filterProducts, getFavorites, getRecents } from '../api/productApi';
 import { StyleSheet, Image, View } from 'react-native';
-import UserContext from '../auth/userContext';
-import ProductList from '../components/lists/ProductList';
-import StoreList from '../components/lists/StoreList';
 
 const SearchScreen = ({ navigation }) => {
     const filterApi = useApi(filterProducts);
@@ -28,6 +28,7 @@ const SearchScreen = ({ navigation }) => {
     const [data, setData] = useState([]);
     const [render, setRender] = useState('');
 
+    // Filter request
     useEffect(() => {
         if (filterApi.data && filterApi.data.products && !filterApi.loading) {
             setData(filterApi.data.products);
@@ -39,6 +40,7 @@ const SearchScreen = ({ navigation }) => {
         };
     }, [filterApi.data, filterApi.loading]);
 
+    // Favorites request
     useEffect(() => {
         if (
             favoritesApi.data &&
@@ -54,6 +56,7 @@ const SearchScreen = ({ navigation }) => {
         };
     }, [favoritesApi.data, favoritesApi.loading]);
 
+    // Recents request
     useEffect(() => {
         if (recentsApi.data && recentsApi.data.recents && !recentsApi.loading) {
             setData(recentsApi.data.recents);
@@ -65,6 +68,7 @@ const SearchScreen = ({ navigation }) => {
         };
     }, [recentsApi.data, recentsApi.loading]);
 
+    // Search request
     useEffect(() => {
         if (storesApi.data && storesApi.data.stores && !storesApi.loading) {
             setData(storesApi.data.stores);
@@ -181,7 +185,7 @@ const SearchScreen = ({ navigation }) => {
                             filterApi.loading
                         }
                     />
-                    {!(data && data.length > 0) && (
+                    {!(data && data.length) && (
                         <Image
                             source={require('../assets/no_results.png')}
                             style={styles.image}
